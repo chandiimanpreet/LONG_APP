@@ -13,7 +13,11 @@ function SideBar() {
                     absolute rounded-full -right-3 top-9' onClick={() => setOpen(!open)} /> : <BsArrowLeftShort className='text-4xl bg-black text-white 
                     absolute rounded-full -right-3 top-9' onClick={() => setOpen(!open)} />
                 }
+                <div className='flex justify-between'> 
+                 {/* button that calls create subloyout */}
+                 
 
+                </div>
             </div>
         </div >
     )

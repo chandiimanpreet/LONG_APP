@@ -1,10 +1,52 @@
 import React from 'react'
 import "./components.css"
+import { useState } from 'react'
+import BoardData from "../backend/boardData.json"
+
+
 import SingleItem from './item'
 import { Droppable } from '@hello-pangea/dnd'
+import { BsPlus } from 'react-icons/bs'
 // import jsonData from '../backend/boardData.json'; // Path to your generated JSON data file
 
-function SubLayout({board,bIndex}) {
+function SubLayout({ board, bIndex }) {
+    const [boardData, setBoardData] = useState(BoardData);
+    const [showForm, setShowForm] = useState(false);
+    const [selectedBoard, setSelectedBoard] = useState(0);
+    const onTextAreaKeyPress = (e) => {
+        if (e.keyCode === 13) //Enter
+        {
+            const val = e.target.value;
+            if (val.length === 0) {
+                setShowForm(false);
+            }
+            else {
+                const boardId = e.target.attributes['data-id'].value;
+                const item = {
+                    id: createGuidId(),
+                    title: val,
+                    priority: 0,
+                    chat: 0,
+                    attachment: 0,
+                    assignees: []
+                }
+                let newBoardData = boardData;
+                newBoardData[boardId].items.push(item);
+                setBoardData(newBoardData);
+                setShowForm(false);
+                e.target.value = '';
+            }
+        }
+    }
+
+    function createGuidId() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+
     return (
         <div key={board.label} className='flex flex-col w-full h-full pb-3  py-5  px-2 m-2  shadow'>
             <Droppable droppableId={bIndex.toString()}>
@@ -31,7 +73,9 @@ function SubLayout({board,bIndex}) {
                             {provided.placeholder}
                         </div>
 
-                        {/* {
+
+
+                        {
                             showForm && selectedBoard === bIndex ? (
                                 <div className="p-3">
                                     <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full"
@@ -41,14 +85,14 @@ function SubLayout({board,bIndex}) {
                                 </div>
                             ) : (
                                 <button
-                                    className="flex justify-center items-center my-3 space-x-2 text-lg"
+                                    className="flex  my-3 space-x-2 text-lg relative"
                                     onClick={() => { setSelectedBoard(bIndex); setShowForm(true); }}
                                 >
-                                    <span>Add task</span>
-                                    <PlusCircleIcon className="w-5 h-5 text-gray-500" />
+                                    <BsPlus className=" text-4xl absolute  -right-3   bg-black relative text-white 
+                                        absolute rounded-full" />
                                 </button>
                             )
-                        } */}
+                        }
 
                     </div>
                 )}
