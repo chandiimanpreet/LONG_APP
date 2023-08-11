@@ -1,9 +1,9 @@
 [
     {
         "label":"Backlog",
-        "data": [
+        "items": [
             {
-                "uid":1,
+                "id":1,
                 "priority": 0,
                 "title": "Company website redesign.",
                 "chat": 1,
@@ -15,7 +15,7 @@
                 ]
             },
             {
-                "uid":2,
+                "id":2,
                 "priority": 2,
                 "title": "Mobile app login process prototype.",
                 "chat": 10,
@@ -30,9 +30,9 @@
     },
     {
         "label":"In Progress",
-        "data": [
+        "items": [
             {
-                "uid":3,
+                "id":3,
                 "priority": 1,
                 "title": "Research and strategy for upcoming project.",
                 "chat": 0,
@@ -47,9 +47,9 @@
     },
     {
         "label":"In Review",
-        "data": [
+        "items": [
             {
-                "uid":4,
+                "id":4,
                 "priority": 2,
                 "title": "Dashboard layout redesign.",
                 "chat": 13,
@@ -61,7 +61,7 @@
                 ]
             },
             {
-                "uid":5,
+                "id":5,
                 "priority": 0,
                 "title": "Social media posts",
                 "chat": 0,
@@ -76,9 +76,9 @@
     },
     {
         "label":"Completed",
-        "data": [
+        "items": [
             {
-                "uid":6,
+                "id":6,
                 "priority": 0,
                 "title": "Review client spec document and give feedback.",
                 "chat": 13,
@@ -90,7 +90,7 @@
                 ]
             },
             {
-                "uid":7,
+                "id":7,
                 "priority": 1,
                 "title": "Navigation designs",
                 "chat": 0,
@@ -102,9 +102,9 @@
                 ]
             },
             {
-                "uid":8,
+                "id":8,
                 "priority": 2,
-                "title": "Create style guuide based on previous feedback",
+                "title": "Create style guide based on previous feedback",
                 "chat": 5,
                 "attachment": 2,
                 "assignees": [
