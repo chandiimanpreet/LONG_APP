@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{jsx,js}"],
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
-    colors: {
+    
+    extend: {colors: {
       transparent: 'transparent',
       current: 'currentColor',
       'white': '#ffffff',
@@ -16,8 +18,7 @@ module.exports = {
       'bermuda': '#78dcca',
       'green': '#00ff00',
       'bak' : '#e5e5e5',
-    },
-    extend: {},
+    },},
   },
   plugins: [],
 }

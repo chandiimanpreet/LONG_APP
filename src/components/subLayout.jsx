@@ -9,7 +9,7 @@ import { Droppable } from '@hello-pangea/dnd'
 import { BsPlus } from 'react-icons/bs'
 // import jsonData from '../backend/boardData.json'; // Path to your generated JSON data file
 
-function SubLayout({ board, bIndex }) {
+function SubLayout({ board, bIndex, theme }) {
     const [boardData, setBoardData] = useState(BoardData);
     const [showForm, setShowForm] = useState(false);
     const [selectedBoard, setSelectedBoard] = useState(0);
@@ -48,13 +48,16 @@ function SubLayout({ board, bIndex }) {
 
 
     return (
-        <div key={board.label} className='flex flex-col w-full h-full pb-3  py-5  px-2 m-2  shadow'>
+        <div
+            key={board.label}
+            className={`flex dark:bg-[#9fadbc] ${theme === 'light'? 'shadow': ''} flex-col w-full h-full pb-2 py-2 px-2 m-2 rounded-lg`}
+        >
             <Droppable droppableId={bIndex.toString()}>
                 {(provided, snapshot) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className='blend'
+                        className='blend dark:bg-[#21272d] dark:text-white rounded-md h-full'
                     >
                         <h1 className="text-3 px-2 xl blend py-5  text-center uppercase">
                             {board.label}

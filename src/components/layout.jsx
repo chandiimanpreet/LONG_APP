@@ -7,7 +7,7 @@ import { DragDropContext } from '@hello-pangea/dnd';
 
 
 
-function Layout() {
+function Layout({theme}) {
 
     const [ready, setReady] = useState(false);
     console.log(BoardData);
@@ -39,7 +39,7 @@ function Layout() {
 
 
     return (
-        <div>
+        <div className="dark:bg-[#161a1d]">
             {ready && (
                 <DragDropContext
                     onDragEnd={onDragEnd}
@@ -47,7 +47,7 @@ function Layout() {
                     <div className="w-full blend flex">
                         {boardData.map((board, bIndex) => {
                             return (
-                                <SubLayout key={bIndex} board={board} bIndex={bIndex} />
+                                <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
                             );
                         })}
                     </div>
