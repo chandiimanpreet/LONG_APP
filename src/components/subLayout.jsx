@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import "./components.css"
 import { useState } from 'react'
 import BoardData from "../backend/boardData.json"
@@ -76,24 +76,24 @@ function SubLayout({ board, bIndex, theme }) {
                             {provided.placeholder}
                         </div>
 
-                        {
-                            showForm && selectedBoard === bIndex ? (
-                                <div className="p-3">
-                                    <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full"
-                                        rows={3} placeholder="Task info"
-                                        data-id={bIndex}
-                                        onKeyDown={(e) => onTextAreaKeyPress(e)} />
-                                </div>
-                            ) : (
-                                <button
-                                    className="flex  my-3 space-x-2 text-lg relative"
-                                    onClick={() => { setSelectedBoard(bIndex); setShowForm(true); }}
-                                >
-                                    <BsPlus className=" text-4xl absolute  -right-3   bg-black relative text-white 
+                            {
+                                showForm && selectedBoard === bIndex ? (
+                                    <div className="p-3">
+                                        <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full"
+                                            rows={3} placeholder="Task info"
+                                            data-id={bIndex}
+                                            onKeyDown={(e) => onTextAreaKeyPress(e)} />
+                                    </div>
+                                ) : (
+                                    <button
+                                        className="flex  my-3 space-x-2 text-lg relative"
+                                        onClick={() => { setSelectedBoard(bIndex); setShowForm(true); }}
+                                    >
+                                        <BsPlus className=" text-4xl absolute  -right-3   bg-black relative text-white 
                                         absolute rounded-full" />
-                                </button>
-                            )
-                        }
+                                    </button>
+                                )
+                            }
 
                     </div>
                 )
