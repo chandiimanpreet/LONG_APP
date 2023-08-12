@@ -76,7 +76,7 @@ function Layout({theme,userData,boardData}) {
                     onDragEnd={onDragEnd}
                 >
                     <div className="w-full blend flex">
-                        {boardData.tickets.map((board, bIndex) => {
+                        {boardData.ticketsEntity.map((board, bIndex) => {
                             return (
                                 <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
                             );

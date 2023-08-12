@@ -14,9 +14,11 @@ function App() {
   const getUserData = async () => {
     try {
       const res = await getUser();
-      const board = await getBoard(res.boards[0]);
+      if (res.boards.length > 0) {
+        const board = await getBoard(res.boards[0]);
+        setBoard(board);
+      }
       setUserData(res);
-      setBoard(board);
     }
     catch (error) {
       console.log(error.message);
