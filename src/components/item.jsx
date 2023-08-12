@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function SingleItem({ data, index }) {
+function SingleItem({ data, index, theme }) {
 
     const [open, setOpen] = useState(false);
     const [text, setText] = useState(data.title);
@@ -93,7 +93,7 @@ function SingleItem({ data, index }) {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className=' blend shadow px-10 pt-5 pb-3 m-3'
+                            className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'}   px-10 pt-5 pb-3 m-3`}
                         >
                             <h1 className='text-3 bg-red blend  pb-8'>{data.title}</h1>
                             <div className="flex justify-between mt-1">
@@ -128,7 +128,7 @@ function SingleItem({ data, index }) {
                                                 rows={3} placeholder="Add a description"
                                                 onKeyDown={(e) => onTextAreaKeyPress(e)} />
                                         </Box>
-                                        <Box sx={{marginTop: '2rem',}}>
+                                        <Box sx={{ marginTop: '2rem', }}>
                                             <Typography>Created  </Typography>
                                             <Typography>Updated </Typography>
                                         </Box>
@@ -146,7 +146,7 @@ function SingleItem({ data, index }) {
                                                         label="Assignee"
                                                         onChange={handleAssignee}
                                                         MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw', }, }}
-                                                        InputProps={{ style: { display : 'flex' }, }}
+                                                        InputProps={{ style: { display: 'flex' }, }}
                                                     >
                                                         {
                                                             assignees.map((name, idx) => (

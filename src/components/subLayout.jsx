@@ -50,27 +50,27 @@ function SubLayout({ board, bIndex, theme }) {
     return (
         <div
             key={board.label}
-            className={`flex dark:bg-[#9fadbc] ${theme === 'light'? 'shadow': ''} flex-col w-full h-full pb-2 py-2 px-2 m-2 rounded-lg`}
+            className={`flex   flex-col w-full h-full pb-2 py-2 px-2 m-2 rounded-lg`}
         >
             <Droppable droppableId={bIndex.toString()}>
                 {(provided, snapshot) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className='blend dark:bg-[#21272d] dark:text-white rounded-md h-full'
+                        className={`dark:text-white rounded-md  blend h-full`}
                     >
-                        <h1 className="text-3 px-2 xl blend py-5  text-center uppercase">
+                        <h1 className={`text-3 px-2  xl py-5  text-center uppercase`}>
                             {board.label}
                         </h1>
                         {/* <DotsVerticalIcon className="w-5 h-5 text-gray-500" /> */}
 
 
-                        <div className="blend overflow-y-auto overflow-x-hidden h-auto"
+                        <div className={` overflow-y-auto  ${theme === 'light' ? 'shadow' : 'shadow-dark'}  overflow-x-hidden h-auto`}
                             style={{ maxHeight: 'calc(100vh - 290px)' }}>
                             {board.items.length > 0 &&
                                 board.items.map((ticket, iIndex) => {
                                     return (
-                                        <SingleItem key={ticket.id} data={ticket} index={iIndex} />
+                                        <SingleItem  key={ticket.id} data={ticket} index={iIndex}  theme={theme}/>
                                     );
                                 })}
                             {provided.placeholder}
@@ -96,9 +96,10 @@ function SubLayout({ board, bIndex, theme }) {
                         }
 
                     </div>
-                )}
-            </Droppable>
-        </div>
+                )
+                }
+            </Droppable >
+        </div >
     )
 }
 

@@ -7,6 +7,18 @@
         -15px -15px 15px #f6f6f6;
 }
 
+
+.shadow-dark {
+    border: 1px solid #1c2126;
+    transition: all .3s;
+    border-radius: 0.6em;
+    background: linear-gradient(145deg, #1e2329, #232a30);
+    box-shadow:  20px 20px 60px #1c2126,
+                 -20px -20px 60px #262d34;
+}
+
+
+
 .blend {
     background: none;
 }
