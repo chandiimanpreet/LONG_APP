@@ -6,8 +6,10 @@ import {
     Backdrop, Button, Modal, Fade, Typography, Avatar, Select, TextField, InputLabel, FormControl, Box, MenuItem
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { moveTicket } from '../backend/api/tickets';
 
-function Layout({ theme }) {
+function Layout({theme,userData,boardData}) {
+    console.log(boardData);
 
     const [ready, setReady] = useState(false);
 
@@ -23,7 +25,7 @@ function Layout({ theme }) {
 
 
     console.log(BoardData);
-    const [boardData, setBoardData] = useState(BoardData);
+    const [boarddata, setBoardData] = useState(BoardData);
 
     useEffect(() => {
         if (process.browser) {
@@ -32,23 +34,11 @@ function Layout({ theme }) {
     }, []);
 
 
-    const onDragEnd = (re) => {
+    const onDragEnd = async (re) => {
         if (!re.destination) return;
-        let newBoardData = boardData;
-        var dragItem =
-            newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
-        newBoardData[parseInt(re.source.droppableId)].items.splice(
-            re.source.index,
-            1
-        );
-        newBoardData[parseInt(re.destination.droppableId)].items.splice(
-            re.destination.index,
-            0,
-            dragItem
-        );
-        setBoardData(newBoardData);
+        await moveTicket(re.source.droppableId,re.source.index,re.destination.droppableId,re.destination.index,boardData.boardName,boardData);
+        // setBoardData(newBoardData);
     };
-
     const [open, setOpen] = useState(false);
 
     const openModal = () => {
@@ -69,7 +59,15 @@ function Layout({ theme }) {
     };
 
 
-
+    if(userData.boards.length===0){
+        return (
+            <>
+            <div className='mt-80 ml-96'>
+                <button className='text-xl font-semibold bg-slate-300 rounded-lg h-12 w-48'>Create your board</button>
+            </div>
+            </>
+        )
+    }
     return (
         <div className="dark:bg-[#161a1d]">
             <Button sx={{ margin: '2rem', }} onClick={openModal} > <AddIcon /> Add member</Button>
@@ -78,7 +76,7 @@ function Layout({ theme }) {
                     onDragEnd={onDragEnd}
                 >
                     <div className="w-full blend flex">
-                        {boardData.map((board, bIndex) => {
+                        {boardData.tickets.map((board, bIndex) => {
                             return (
                                 <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
                             );

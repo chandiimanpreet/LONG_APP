@@ -25,7 +25,7 @@ function SingleItem({ data, index, theme }) {
 
 
     const [open, setOpen] = useState(false);
-    const [text, setText] = useState(data.title);
+    const [text, setText] = useState(data[1]);
 
     const openModal = () => {
         setOpen(true);
@@ -87,7 +87,7 @@ function SingleItem({ data, index, theme }) {
 
     return (
         <Fragment>
-            <Draggable index={index} draggableId={data.id.toString()}>
+            <Draggable index={index} draggableId={data[0].toString()}>
                 {(provided) => (
                     <Fragment>
                         <div onClick={openModal}
@@ -96,9 +96,9 @@ function SingleItem({ data, index, theme }) {
                             {...provided.dragHandleProps}
                             className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'}   px-10 pt-5 pb-3 m-3`}
                         >
-                            <h1 className='text-3 bg-red blend  pb-8'>{data.title}</h1>
+                            <h1 className='text-3 bg-red blend  pb-8'>{data[1]}</h1>
                             <div className="flex justify-between mt-1">
-                                <p className='mt-4'>EG-{data.id}</p>
+                                <p className='mt-4'>EG-{data[0]}</p>
                                 <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('hello fdgdf')} />
                             </div>
                         </div>

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../backend/firebase';
-
-function MainNavBar({ theme, setTheme}) {
+import React, { useEffect } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../backend/firebase'
+function MainNavBar({setUserData,theme,setTheme}) {
     const [user] = useAuthState(auth);
     useEffect(() => {
         if (theme === 'dark') {
@@ -32,7 +31,7 @@ function MainNavBar({ theme, setTheme}) {
                         className='rounded-full  cursor-pointer h-12 w-12'
                     />
                     <br />
-                    <button onClick={() => auth.signOut()} className='logout-btn'>Sign Out</button>
+                    <button onClick={() => {auth.signOut();setUserData(null);}} className=' logout-btn'>sign out</button>
                 </div>
             </header>
         </div>
