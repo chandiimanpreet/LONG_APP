@@ -1,14 +1,28 @@
 import React, { Fragment, useState } from 'react'
 import "./components.css"
 import { Draggable } from '@hello-pangea/dnd';
-import { Backdrop, Box, Modal, Fade, Typography, Avatar, TextField } from '@mui/material';
+import {
+    Backdrop, Box, Modal, Fade, Typography, Avatar, Select, TextField, InputLabel, MenuItem, FormControl
+} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 function SingleItem({ data, index, theme }) {
+
+    const assignees = ['Manpreet Singh', 'Gautam Kumar', 'Roshan Singh', 'Somnath Das', 'Pranav Rastagi', 'Rahul Shah',
+        'Arshdeep Singh', 'Priyanshu Maikhuri', 'Raj Kumar', 'Aakash Kshyap', 'Himalay Das', 'Chaavi Jain', 'Komal Bairwa'];
+
+    const reporters = ['Pranav Rastagi', 'Rahul Shah', 'Himalay Das'];
+
+    const [assigneeName, setAssigneeName] = useState('');
+    const [reporterName, setReporterName] = useState('');
+
+    const handleAssignee = (event) => {
+        setAssigneeName(event.target.value);
+    };
+    const handleReporter = (event) => {
+        setReporterName(event.target.value);
+    };
+
 
     const [open, setOpen] = useState(false);
     const [text, setText] = useState(data.title);
@@ -69,20 +83,7 @@ function SingleItem({ data, index, theme }) {
         };
     }
 
-    const [assigneeName, setAssigneeName] = useState('');
-    const [reporterName, setReporterName] = useState('');
 
-    const handleAssignee = (event) => {
-        setAssigneeName(event.target.value);
-    };
-    const handleReporter = (event) => {
-        setReporterName(event.target.value);
-    };
-
-    const assignees = ['Manpreet Singh', 'Gautam Kumar', 'Roshan Singh', 'Somnath Das', 'Pranav Rastagi', 'Rahul Shah',
-        'Arshdeep Singh', 'Priyanshu Maikhuri', 'Raj Kumar', 'Aakash Kshyap', 'Himalay Das', 'Chaavi Jain', 'Komal Bairwa'];
-
-    const reporters = ['Pranav Rastagi', 'Rahul Shah', 'Himalay Das'];
 
     return (
         <Fragment>
