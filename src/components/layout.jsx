@@ -1,11 +1,7 @@
-
 import SubLayout from './subLayout'
 import React, { useEffect, useState } from 'react'
 import BoardData from '../backend/boardData.json'; // Path to your generated JSON data file
 import { DragDropContext } from '@hello-pangea/dnd';
-
-
-
 
 function Layout({theme}) {
 
