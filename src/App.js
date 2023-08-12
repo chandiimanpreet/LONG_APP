@@ -26,18 +26,18 @@ function App() {
       setLoading(false);
     }
 
-  }
+    }
 
-  useEffect(() => {
-    getUserData()
-  }, [])
-  if (loading) {
-    return <Loading />;
-  } else {
-    return (
-      userData ? <Home userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData} /> : <Login setUserData={setUserData} />
-    )
-  }
+    useEffect(() => {
+        getUserData()
+    }, [])
+    if (loading) {
+        return <Loading />;
+    } else {
+        return (
+            userData ? <Home userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData} /> : <Login setUserData={setUserData} />
+        )
+    }
 }
 
 export default App;

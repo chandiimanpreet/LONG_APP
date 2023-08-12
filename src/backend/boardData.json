@@ -1,5 +1,6 @@
 [
     {
+        "id": 0,
         "label": "Backlog",
         "items": [
             {
@@ -23,6 +24,7 @@
         ]
     },
     {
+        "id": 1,
         "label": "In Progress",
         "items": [
             {
@@ -37,6 +39,7 @@
         ]
     },
     {
+        "id": 2,
         "label": "In Review",
         "items": [
             {
@@ -60,6 +63,7 @@
         ]
     },
     {
+        "id": 3,
         "label": "Completed",
         "items": [
             {
