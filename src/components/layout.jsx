@@ -51,8 +51,9 @@ function Layout({theme}) {
                             );
                         })}
                     </div>
-                </DragDropContext>
+                </DragDropContext>   
             )}
+      
         </div>
 
 
