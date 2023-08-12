@@ -4,10 +4,7 @@ import React, { useEffect, useState } from 'react'
 import BoardData from '../backend/boardData.json'; // Path to your generated JSON data file
 import { DragDropContext } from '@hello-pangea/dnd';
 
-
-
-
-function Layout({theme}) {
+function Layout({theme,userData}) {
 
     const [ready, setReady] = useState(false);
     console.log(BoardData);
@@ -36,7 +33,15 @@ function Layout({theme}) {
         );
         setBoardData(newBoardData);
     };
-
+    if(userData.boards.length===0){
+        return (
+            <>
+            <div className='mt-80 ml-96'>
+                <button className='text-xl font-semibold bg-slate-300 rounded-lg h-12 w-48'>Create your board</button>
+            </div>
+            </>
+        )
+    }
 
     return (
         <div className="dark:bg-[#161a1d]">

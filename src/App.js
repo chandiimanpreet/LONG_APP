@@ -1,19 +1,38 @@
+import { useState } from 'react';
 import './App.css';
-import { auth } from './backend/firebase';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import Loading from './components/Loading';
+import { useEffect } from 'react';
+import { getUser } from './backend/api/user';
 
 function App() {
-  const [user] = useAuthState(auth);
-  return (
-      <div>
-        <div>{
-          user ? <Home /> : <Login />
-        }</div>
-      </div>
-  );
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [boardData, setBoard] = useState(null);
+  const getUserData = async () => {
+    try {
+      const res = await getUser();
+      setUserData(res);
+    }
+    catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
+
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+  if (loading) {
+    return <Loading />;
+  } else {
+    return (
+      userData ? <Home userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData}/> : <Login setUserData={setUserData} />
+    )
+  }
 }
 
 export default App;
- 
