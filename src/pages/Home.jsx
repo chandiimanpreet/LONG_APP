@@ -7,14 +7,15 @@ import BoardData from "../backend/boardData.json"
 
 function Home() {
 
+    const [theme, setTheme] = useState('light');
 
     return (
         <div>
-            <MainNavBar />
+            <MainNavBar theme={theme} setTheme={setTheme}/>
+            <hr/>
             <div className='flex'>
-                <SideBar />
-                <Layout />
-
+                <SideBar theme={theme} />
+                <Layout theme={theme} />
             </div>
 
         </div>

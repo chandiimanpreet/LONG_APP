@@ -17,7 +17,6 @@
     -20px -20px 60px #ff303a; */
 }
 
-
 .logout-btn:hover {
   border: 1px solid white;
 }
@@ -26,7 +25,6 @@
   box-shadow: 4px 4px 12px #c5c5c5,
     -4px -4px 12px #ffffff;
 }
-
 
 .button-main {
   margin-top: 50vh;

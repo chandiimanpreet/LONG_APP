@@ -18,7 +18,6 @@ function SingleItem({ data, index }) {
                 </div>
             )}
         </Draggable>
-
     )
 }
 export default SingleItem
