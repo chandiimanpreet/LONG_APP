@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useStyles } from "./style";
 import { addBoard, getBoard } from '../backend/api/board';
+
 const style = {
     position: 'absolute',
     top: '50%',

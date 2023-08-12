@@ -1,14 +1,13 @@
 import SubLayout from './subLayout'
-import React, { useEffect, useState } from 'react'
-import BoardData from '../backend/boardData.json'; // Path to your generated JSON data file
+import React, { useEffect, useState, Fragment } from 'react'
 import { DragDropContext } from '@hello-pangea/dnd';
 import {
-    Backdrop, Button, Modal, Fade, Typography, Avatar, Select, TextField, InputLabel, FormControl, Box, MenuItem
+    Backdrop, Button, Modal, Fade, Typography, Avatar, AvatarGroup, Select, TextField, InputLabel, FormControl, Box, MenuItem
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 
-function Layout({theme,userData,boardData}) {
+function Layout({ theme, userData, boardData }) {
     console.log(boardData);
 
     const [ready, setReady] = useState(false);
@@ -24,9 +23,6 @@ function Layout({theme,userData,boardData}) {
     }
 
 
-    console.log(BoardData);
-    const [boarddata, setBoardData] = useState(BoardData);
-
     useEffect(() => {
         if (process.browser) {
             setReady(true);
@@ -36,7 +32,7 @@ function Layout({theme,userData,boardData}) {
 
     const onDragEnd = async (re) => {
         if (!re.destination) return;
-        await moveTicket(re.source.droppableId,re.source.index,re.destination.droppableId,re.destination.index,boardData.boardName,boardData);
+        await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData.boardName, boardData);
         // setBoardData(newBoardData);
     };
     const [open, setOpen] = useState(false);
@@ -58,32 +54,74 @@ function Layout({theme,userData,boardData}) {
         p: 6,
     };
 
+    function stringToColor(string) {
+        let hash = 0;
+        let i;
 
-    if(userData.boards.length===0){
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+            hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        }
+
+        let color = '#';
+
+        for (i = 0; i < 3; i += 1) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += `00${value.toString(16)}`.slice(-2);
+        }
+        /* eslint-enable no-bitwise */
+
+        return color;
+    }
+
+    function stringAvatar(name) {
+        return {
+            sx: {
+                bgcolor: stringToColor(name),
+            },
+            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        };
+    }
+
+
+    if (userData.boards.length === 0) {
         return (
-            <>
-            <div className='mt-80 ml-96'>
-                <button className='text-xl font-semibold bg-slate-300 rounded-lg h-12 w-48'>Create your board</button>
-            </div>
-            </>
+            <Fragment>
+                <div className='mt-80 ml-96'>
+                    <button className='text-xl font-semibold bg-slate-300 rounded-lg h-12 w-48'>Create your board</button>
+                </div>
+            </Fragment>
         )
     }
     return (
         <div className="dark:bg-[#161a1d]">
-            <Button sx={{ margin: '2rem', }} onClick={openModal} > <AddIcon /> Add member</Button>
-            {ready && (
-                <DragDropContext
-                    onDragEnd={onDragEnd}
-                >
-                    <div className="w-full blend flex">
-                        {boardData.ticketsEntity.map((board, bIndex) => {
-                            return (
-                                <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
-                            );
-                        })}
-                    </div>
-                </DragDropContext>
-            )}
+
+            <Box sx={{ display: 'flex', }}>
+                <AvatarGroup total={11} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
+                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Manpreet Singh')} />
+                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Roshan Singh')} />
+                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Arshdeep Singh')} />
+                </AvatarGroup>
+                <Button sx={{ margin: '2rem 2rem 2rem 0', }} onClick={openModal} > <AddIcon /> Add member</Button>
+            </Box>
+
+
+            {
+                ready && (
+                    <DragDropContext
+                        onDragEnd={onDragEnd}
+                    >
+                        <div className="w-full blend flex">
+                            {
+                                boardData.ticketsEntity.map((board, bIndex) => {
+                                    return (
+                                        <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
+                                    );
+                                })
+                            }
+                        </div>
+                    </DragDropContext>
+                )}
 
             {
                 open && (
@@ -104,14 +142,14 @@ function Layout({theme,userData,boardData}) {
                             <Box sx={style}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography variant='h5' >Add Member</Typography>
-                                    <TextField
+                                    <TextField required
                                         id="outlined-controlled"
                                         label="Name"
                                         value={data.name}
                                         onChange={dataHandler}
-                                        sx={{ marginBottom: '1rem',marginTop: '1rem' }}
+                                        sx={{ marginBottom: '1rem', marginTop: '1rem' }}
                                     />
-                                    <TextField
+                                    <TextField required
                                         id="outlined-controlled"
                                         label="Email"
                                         value={data.email}
@@ -119,7 +157,7 @@ function Layout({theme,userData,boardData}) {
                                         sx={{ marginBottom: '1rem' }}
                                     />
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Permission</InputLabel>
+                                        <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -127,21 +165,21 @@ function Layout({theme,userData,boardData}) {
                                             label="Permission"
                                             onChange={dataHandler}
                                         >
-                                        <MenuItem value={'Owner'}>Owner</MenuItem>
-                                        <MenuItem value={'Editor'}>Editor</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                            <MenuItem value={'Owner'}>Owner</MenuItem>
+                                            <MenuItem value={'Editor'}>Editor</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
+                                    <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
+                                    <Button variant='contained' color='success'>Add</Button>
+                                </Box>
                             </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
-                                <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
-                                <Button variant='contained' color='success'>Save</Button>
-                            </Box>
-                        </Box>
-                    </Fade>
+                        </Fade>
                     </Modal>
-    )
+                )
 
-}
+            }
 
         </div >
 
