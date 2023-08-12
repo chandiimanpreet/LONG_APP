@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Loading from './components/Loading';
 import { useEffect } from 'react';
 import { getUser } from './backend/api/user';
+import { getBoard } from './backend/api/board';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -13,7 +14,9 @@ function App() {
   const getUserData = async () => {
     try {
       const res = await getUser();
+      const board = await getBoard(res.boards[0]);
       setUserData(res);
+      setBoard(board);
     }
     catch (error) {
       console.log(error.message);
@@ -30,7 +33,7 @@ function App() {
     return <Loading />;
   } else {
     return (
-      userData ? <Home userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData}/> : <Login setUserData={setUserData} />
+      userData ? <Home userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData} /> : <Login setUserData={setUserData} />
     )
   }
 }
