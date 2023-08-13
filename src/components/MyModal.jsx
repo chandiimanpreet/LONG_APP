@@ -1,10 +1,10 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import {
     Backdrop, Box, Modal, Fade, Typography, Avatar, Select, TextField, InputLabel, MenuItem, FormControl, Button
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const MyModal = ({ open, data, openModal, closeModal, onTextAreaKeyPress, getModalDataFromModal }) => {
+const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress, getModalDataFromModal }) => {
 
     const assignees = ['Manpreet Singh', 'Gautam Kumar', 'Roshan Singh', 'Somnath Das', 'Pranav Rastagi', 'Rahul Shah',
         'Arshdeep Singh', 'Priyanshu Maikhuri', 'Raj Kumar', 'Aakash Kshyap', 'Himalay Das', 'Chaavi Jain', 'Komal Bairwa'];
@@ -25,14 +25,32 @@ const MyModal = ({ open, data, openModal, closeModal, onTextAreaKeyPress, getMod
 
     const style = {
         position: 'absolute',
+        borderRadius: '20px',
         top: '30%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 1200,
-        boxShadow: 10,
-        bgcolor: 'background.paper',
         border: '2px solid #000',
-        p: 4,
+        padding: '16px',
+        color: theme === 'dark' ? 'white' : 'black',
+        background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
+        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+    };
+
+    const textFieldStyle = {
+        color: theme === 'dark' ? 'white' : 'black', // Text color
+        '& .MuiInputLabel-root': {
+            color: theme === 'dark' ? 'white' : 'black', // Label color
+        },
+        '& .MuiInputBase-input': {
+            color: theme === 'dark' ? 'white' : 'black', // Input text color
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme === 'dark' ? 'white' : 'black', // Border color
+        },
+        '& .MuiInputBase-input.Mui-disabled': {
+            color: theme === 'dark' ? 'white' : 'black', // Disabled input text color
+        },
     };
 
 
@@ -72,7 +90,7 @@ const MyModal = ({ open, data, openModal, closeModal, onTextAreaKeyPress, getMod
             <Fade in={open}>
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <textarea className="border-gray-300 rounded focus:ring-purple-400 w-1/2 text-3xl font-semibold"
+                        <textarea className="border-gray-300 bg-[#cfcfcf] dark:bg-[#20262d] rounded focus:ring-purple-400 w-1/2 text-3xl font-semibold"
                             name='text'
                             value={data.title !== '' ? data.title : modalData.text}
                             onChange={dataHandler} placeholder='Ticket Name' />
@@ -83,75 +101,89 @@ const MyModal = ({ open, data, openModal, closeModal, onTextAreaKeyPress, getMod
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Box sx={{ marginTop: '1rem' }}>
-                                <Typography>Description</Typography>
-                                <TextField className="border-gray-300 rounded focus:ring-purple-400 w-96 "
+                                <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
                                     rows={3} placeholder="Add a description" name='description'
                                     value={modalData.description}
                                     onChange={dataHandler} />
                             </Box>
                             <Box sx={{ marginTop: '2rem', }}>
                                 <Typography>Created  </Typography>
+                                <br />
                                 <Typography>Updated </Typography>
                             </Box>
                         </Box>
+
                         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                             <Box sx={{ display: 'flex', marginBottom: '15px' }}>
-                                <Typography sx={{ marginRight: '8rem' }} >Assignee</Typography>
+                                <Typography sx={{ margin: '1rem 4rem' }} >Assignee</Typography>
                                 <Box sx={{ minWidth: 240 }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="assigneeID">Assignee</InputLabel>
                                         <Select
+                                            sx={textFieldStyle}
                                             labelId="assigneeID"
                                             id="demo"
                                             name='assigneeName'
                                             value={modalData.assigneeName}
                                             label="Assignee"
                                             onChange={dataHandler}
-                                            MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw', }, }}
-
+                                            MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
-                                            {
-                                                assignees.map((name, idx) => (
-                                                    <MenuItem key={idx} value={name} ><Avatar sx={{ width: 5, height: 5, display: 'inline' }} {...stringAvatar(name)} />
-                                                        <Typography sx={{ marginLeft: '7px' }}>{name}</Typography>
-                                                    </MenuItem>
-                                                ))
-                                            }
+                                            {assignees.map((name, idx) => (
+                                                <MenuItem key={idx} value={name}>
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Avatar {...stringAvatar(name)} />
+                                                        <Typography marginLeft={1}>{name}</Typography>
+                                                    </div>
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Box>
                             </Box>
                             <Box sx={{ display: 'flex', }}>
-                                <Typography sx={{ marginRight: '8rem' }} >Reporter</Typography>
+                                <Typography sx={{ margin: '1rem 4rem' }} >Reporter</Typography>
                                 <Box sx={{ minWidth: 240 }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="reporterID">Reporter</InputLabel>
                                         <Select
+                                            sx={textFieldStyle}
                                             labelId="reporterID"
                                             id="simple"
                                             name='reporterName'
                                             value={modalData.reporterName}
                                             label="Reporter"
                                             onChange={dataHandler}
-                                            MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw', }, }}
+                                            MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
-                                            {
-                                                reporters.map((name, idx) => (
-                                                    <MenuItem key={idx} value={name} ><Avatar sx={{ width: 5, height: 5, }} {...stringAvatar(name)} />
-                                                        <Typography sx={{ marginLeft: '7px' }}>{name}</Typography>
-                                                    </MenuItem>
-                                                ))
-                                            }
+                                            {reporters.map((name, idx) => (
+                                                <MenuItem key={idx} value={name}>
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Avatar {...stringAvatar(name)} />
+                                                        <Typography marginLeft={1}>{name}</Typography>
+                                                    </div>
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
+
                                 </Box>
                             </Box>
 
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem' }}>
-                                <Button onClick={closeModal} variant='outlined' color='error' sx={{ marginRight: '1rem' }}>Cancel</Button>
+                                <Button onClick={closeModal} variant='outlined' color='error' sx={{
+                                    marginRight: '1rem',
+                                    fontWeight: 'bold',
+                                    borderWidth: '2px',
+                                }}>Cancel</Button>
+
                                 <Button variant='outlined' color='success' onClick={() => {
                                     getModalDataFromModal(modalData);
                                     closeModal();
+                                }} sx={{
+                                    marginRight: '1rem',
+                                    fontWeight: 'bold',
+                                    borderWidth: '2px',
                                 }}>
                                     {data.id !== undefined ? 'Save' : 'Create'}
                                 </Button>

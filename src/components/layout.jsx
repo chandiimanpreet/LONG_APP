@@ -48,10 +48,28 @@ function Layout({ theme, userData, boardData }) {
         top: '40%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        borderRadius: '20px',
         width: 600,
-        boxShadow: 10,
-        bgcolor: 'background.paper',
         p: 6,
+        color: theme === 'dark' ? 'white' : 'black',
+        background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
+        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+    };
+
+    const textFieldStyle = {
+        color: theme === 'dark' ? 'white' : 'black', // Text color
+        '& .MuiInputLabel-root': {
+            color: theme === 'dark' ? 'white' : 'black', // Label color
+        },
+        '& .MuiInputBase-input': {
+            color: theme === 'dark' ? 'white' : 'black', // Input text color
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme === 'dark' ? 'white' : 'black', // Border color
+        },
+        '& .MuiInputBase-input.Mui-disabled': {
+            color: theme === 'dark' ? 'white' : 'black', // Disabled input text color
+        },
     };
 
     function stringToColor(string) {
@@ -102,9 +120,8 @@ function Layout({ theme, userData, boardData }) {
                     <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Roshan Singh')} />
                     <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Arshdeep Singh')} />
                 </AvatarGroup>
-                <Button sx={{ margin: '2rem 2rem 2rem 0', }} onClick={openModal} > <AddIcon /> Add member</Button>
+                <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold' }} onClick={openModal} > <AddIcon /> Add member</Button>
             </Box>
-
 
             {
                 ready && (
@@ -140,23 +157,21 @@ function Layout({ theme, userData, boardData }) {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
                                     <Typography variant='h5' >Add Member</Typography>
                                     <TextField required
-                                        id="outlined-controlled"
+                                        sx={textFieldStyle}
                                         label="Name"
                                         value={data.name}
                                         onChange={dataHandler}
-                                        sx={{ marginBottom: '1rem', marginTop: '1rem' }}
                                     />
                                     <TextField required
-                                        id="outlined-controlled"
+                                        sx={textFieldStyle}
                                         label="Email"
                                         value={data.email}
                                         onChange={dataHandler}
-                                        sx={{ marginBottom: '1rem' }}
                                     />
-                                    <FormControl fullWidth>
+                                    <FormControl fullWidth sx={textFieldStyle}>
                                         <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"

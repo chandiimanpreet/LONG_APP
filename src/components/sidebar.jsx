@@ -12,18 +12,6 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useStyles } from "./style";
 import { addBoard, getBoard } from '../backend/api/board';
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    zIndex: 1300,
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    background: 'wheat'
-};
 function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
 
     // <div className={`${theme === 'light'? 'shadow': ''} dark:bg-[#21272d] h-screen duration-200 p-5 pt-8 ${open ? "w-72" : "w-20"} m-2 rounded-lg relative`}>
@@ -34,6 +22,37 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
     const [sidebutton, setSideButton] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const style = {
+        position: 'absolute',
+        borderRadius: '20px',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        zIndex: 1300,
+        border: '2px solid #000',
+        p: 4,
+        background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
+        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+    };
+
+    const textFieldStyle = {
+        color: theme === 'dark' ? 'white' : 'black', // Text color
+        '& .MuiInputLabel-root': {
+            color: theme === 'dark' ? 'white' : 'black', // Label color
+        },
+        '& .MuiInputBase-input': {
+            color: theme === 'dark' ? 'white' : 'black', // Input text color
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme === 'dark' ? 'white' : 'black', // Border color
+        },
+        '& .MuiInputBase-input.Mui-disabled': {
+            color: theme === 'dark' ? 'white' : 'black', // Disabled input text color
+        },
+    };
+
     const clickLeftArrow = () => {
         setSideButton(!sidebutton)
         setSideOpen(!sideopen)
@@ -84,10 +103,18 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                         aria-describedby="modal-modal-description"
                     >
                         <Box onSubmit={submitHandler} component='form' sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                ProjectName
-                            </Typography>
-                            <TextField onChange={(e) => setProject(e.target.value)} required sx={{ color: 'black' }} id="outlined-basic"
+
+                            <Box display='flex' justifyContent='space-between'>
+                                <Typography fontWeight='bold' className='dark:text-white' id="modal-modal-title" variant="h6" component="h2">
+                                    Project Name
+                                </Typography>
+
+                                <CloseIcon className='dark:text-white' fontWeight='bold' onClick={handleClose} />
+                            </Box><br />
+
+                            <TextField onChange={(e) => setProject(e.target.value)} required
+                                sx={textFieldStyle}
+                                id="outlined-basic"
                                 label="Enter Project Name"
                                 variant="outlined"
                                 autoFocus
@@ -95,15 +122,16 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                                 type="text"
                                 value={project}
                                 fullWidth />
-                            <CloseIcon className={classes.closeButton} onClick={handleClose} />
+
+                            <br /> <br />
                             <Button type='submit' variant="outlined" sx={{
-                                left: "-22px",
-                                top: "3px",
-                                borderColor: "black",
-                                color: "black",
-                                width: "8rem"
+                                fontWeight: "bold",
+                                borderColor: 'green',
+                                color: 'green',
+                                width: "8rem",
+                                border: '2px solid green',
                             }}>
-                                <AddCircleRoundedIcon className={classes.addIcon} />
+                                <AddCircleRoundedIcon />
                                 Create</Button>
                         </Box>
                     </Modal>
@@ -112,8 +140,8 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                     {!sidebutton &&
                         <>
                             <button className='text-lg font-semibold rounded-md' style={{
-                                color: "black",
-                                border: "1px solid black",
+                                color: theme === 'dark' ? 'white' : 'black',
+                                border: theme === 'dark' ? '3px solid white' : '3px solid black',
                                 width: "15rem",
                                 height: "3rem",
                                 position: "relative",
@@ -123,19 +151,19 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                                 <AddCircleRoundedIcon className={classes.addIcon} />
                                 Add Board
                             </button>
-                            <p className='text-lg font-bold mt-4'>Your Boards</p>
+                            <p className='text-lg dark:text-white font-bold mt-4'>Your Boards</p>
                             {
                                 userData && userData.boards.map((ele) => {
                                     return <button key={ele} className='text-lg font-semibold rounded-md' style={{
-                                        color: "black",
-                                        border: "1px solid black",
+                                        color: theme === 'dark' ? 'white' : 'black',
+                                        border: theme === 'dark' ? '3px solid white' : '3px solid black',
                                         width: "15rem",
                                         height: "3rem",
                                         position: "relative",
                                         left: "-4px",
                                         marginTop: "12px"
 
-                                    }} onClick={()=>openBoardHandler(ele)} >
+                                    }} onClick={() => openBoardHandler(ele)} >
                                         {ele}
                                     </button>
                                 })
