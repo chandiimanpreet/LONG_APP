@@ -9,7 +9,7 @@ export const addBoard = (data) => {
         if (board.exists()) {
             resolve({ message: "name already exists" });
         } else {
-            const addData = { member: [], owner: [], ticketsEntity: [{ "backlogs": [] }, { "inprogress": [] }, { "inreview": [] }, { "completed": [] }], nextId: 1 };
+            const addData = {boardName:data.name, member: [], owner: [], ticketsEntity: [{ "backlogs": [] }, { "inprogress": [] }, { "inreview": [] }, { "completed": [] }], nextId: 1 };
             await setDoc(docRef, addData);
             const userDocRef = doc(db, "user", auth.currentUser.uid);
             await setDoc(userDocRef, {

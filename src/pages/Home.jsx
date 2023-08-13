@@ -5,19 +5,20 @@ import Layout from '../components/layout'
 import Pulse from '../components/Pulse';
 
 
-function Home({ userData, setUserData, setBoard ,boardData}) {
+function Home({ userData, setUserData, setBoard, boardData, setPulseLoading, pulseLoading }) {
 
     const [theme, setTheme] = useState('light');
-    const [loading, setLoading] = useState(false);
+
     console.log(boardData);
 
     return (
         <div className='dark:bg-[#161a1d]'>
             <hr />
-            <MainNavBar setUserData={setUserData} theme={theme} setTheme={setTheme} />
+            <MainNavBar setUserData={setUserData} theme={theme} setTheme={setTheme} setBoard={setBoard} />
             <div className='flex'>
-                <SideBar setBoard={setBoard} setLoading={setLoading} theme={theme} userData={userData} setUserData={setUserData} />
-                {loading ? <Pulse /> : <Layout theme={theme} userData={userData} setLoading={setLoading} boardData={boardData}/>}
+                <SideBar setBoard={setBoard} setLoading={setPulseLoading} theme={theme} userData={userData} setUserData={setUserData} />
+                {pulseLoading ? <Pulse /> : <Layout setBoard={setBoard} theme={theme} userData={userData} setLoading={setPulseLoading} boardData={boardData} />}
+
             </div>
         </div>
     )
