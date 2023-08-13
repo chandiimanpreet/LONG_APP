@@ -12,15 +12,13 @@ function Home({ userData, setUserData, setBoard ,boardData}) {
     console.log(boardData);
 
     return (
-        <div>
+        <div className='dark:bg-[#161a1d]'>
             <hr />
             <MainNavBar setUserData={setUserData} theme={theme} setTheme={setTheme} />
             <div className='flex'>
                 <SideBar setBoard={setBoard} setLoading={setLoading} theme={theme} userData={userData} setUserData={setUserData} />
                 {loading ? <Pulse /> : <Layout theme={theme} userData={userData} setLoading={setLoading} boardData={boardData}/>}
-
             </div>
-
         </div>
     )
 }

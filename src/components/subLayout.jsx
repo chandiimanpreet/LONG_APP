@@ -70,14 +70,13 @@ const SubLayout = ({ board, bIndex, theme }) => {
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className={`dark:text-white rounded-md  blend h-full`}
+                        className={`dark:text-white rounded-md blend h-full`}
                     >
 
-                        <h1 className={`text-3 px-2  xl py-5 text-center uppercase`}>
+                        <h1 className={`text-3 px-2 font-bold xl py-5 text-center uppercase`}>
                             {Object.keys(board)[0]}
                         </h1>
                         {/* <DotsVerticalIcon className="w-5 h-5 text-gray-500" /> */}
-
 
                         <div className={` overflow-y-auto  ${theme === 'light' ? 'shadow' : 'shadow-dark'}  overflow-x-hidden h-auto`}
                             style={{ maxHeight: 'calc(100vh - 290px)' }}>
@@ -92,19 +91,24 @@ const SubLayout = ({ board, bIndex, theme }) => {
                         </div>
                         {
                             console.log(Object.keys(board)[0])
-}
-                        <button className="flex  my-3 space-x-2 text-lg relative" >
-                            <BsPlus id={Object.keys(board)[0]} onClick={(e) => {
-                                setSelectedBoard(board.id);
-                                openModal();
-                            }}
-                                className=" text-4xl absolute  -right-3   bg-black relative text-white 
-                                                absolute rounded-full" />
-                        </button>
+                        }
+                        <div className="flex justify-center">
+                            <button className="my-3 text-lg relative">
+                                <BsPlus
+                                    id={Object.keys(board)[0]}
+                                    onClick={(e) => {
+                                        setSelectedBoard(board.id);
+                                        openModal();
+                                    }}
+                                    className="text-4xl absolute bg-black relative text-white rounded-full"
+                                />
+                            </button>
+                        </div>
+
 
                         {
                             open && (
-                                <MyModal open={open} data={[]} openModal={openModal} closeModal={closeModal}
+                                <MyModal theme={theme} open={open} data={[]} openModal={openModal} closeModal={closeModal}
                                     onTextAreaKeyPress={onTextAreaKeyPress} getModalDataFromModal={getModalDataFromModal} />
                             )
                         }
