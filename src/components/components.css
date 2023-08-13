@@ -5,6 +5,7 @@
     background: linear-gradient(145deg, #c1c1c1, #e5e5e5);
     box-shadow: 20px 20px 60px #b6b6b6,
         -20px -20px 60px #f6f6f6;
+    width:17vw;
 }
 
 .shadow-dark {

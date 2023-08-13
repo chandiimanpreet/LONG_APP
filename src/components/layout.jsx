@@ -7,7 +7,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 
-function Layout({ theme, userData, boardData }) {
+function Layout({ theme, userData, boardData ,setBoard}) {
+    console.log(boardData);
 
     const [ready, setReady] = useState(false);
     const [open, setOpen] = useState(false);
@@ -33,7 +34,6 @@ function Layout({ theme, userData, boardData }) {
     const onDragEnd = async (re) => {
         if (!re.destination) return;
         await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData.boardName, boardData);
-        // setBoardData(newBoardData);
     };
 
     const style = {
@@ -121,10 +121,11 @@ function Layout({ theme, userData, boardData }) {
                         onDragEnd={onDragEnd}
                     >
                         <div className="w-full blend flex">
+                            {console.log(boardData)}
                             {
-                                boardData.ticketsEntity.map((board, bIndex) => {
+                                boardData.ticketsEntity && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
-                                        <SubLayout theme={theme} key={bIndex} board={board} bIndex={bIndex} />
+                                        <SubLayout theme={theme} setBoard={setBoard} boardData={boardData} key={bIndex} board={board} bIndex={bIndex} />
                                     );
                                 })
                             }

@@ -12,10 +12,11 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
     const reporters = ['Pranav Rastagi', 'Rahul Shah', 'Himalay Das'];
 
     const [modalData, setmodalData] = useState({
-        text: '',
-        assigneeName: '',
+        title: '',
+        assignee: '',
         reporterName: '',
         description: '',
+        priority: 0,
     });
 
 
@@ -89,8 +90,8 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <textarea className="border-gray-300 bg-[#cfcfcf] dark:bg-[#282E33] rounded focus:ring-purple-400 w-1/2 text-3xl font-semibold"
-                            name='text'
-                            value={data.title !== '' ? data.title : modalData.text}
+                            name='title'
+                            value={data.title !== '' ? data.title : modalData.title}
                             onChange={dataHandler} placeholder='Ticket Name' />
 
                         <ClearIcon onClick={closeModal} sx={{ cursor: 'pointer' }} />
@@ -122,24 +123,26 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                             sx={textFieldStyle}
                                             labelId="assigneeID"
                                             id="demo"
-                                            name='assigneeName'
-                                            value={modalData.assigneeName}
+                                            name='assignee'
+                                            value={modalData.assignee}
                                             label="Assignee"
                                             onChange={dataHandler}
                                             MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
-                                            {assignees.map((name, idx) => (
-                                                <MenuItem key={idx} value={name}>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Avatar {...stringAvatar(name)} />
-                                                        <Typography marginLeft={1}>{name}</Typography>
-                                                    </div>
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Box>
+                                            {
+                                                assignees.map((name, idx) => (
+                                                    <MenuItem key={idx} value={name}>
+                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Avatar {...stringAvatar(name)} />
+                                                            <Typography marginLeft={1}>{name}</Typography>
+                                                        </div>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </Select >
+                                    </FormControl >
+                                </Box >
+                            </Box >
                             <Box sx={{ display: 'flex', }}>
                                 <Typography sx={{ margin: '1rem 4rem' }} >Reporter</Typography>
                                 <Box sx={{ minWidth: 240 }}>
@@ -156,19 +159,21 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                             onChange={dataHandler}
                                             MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
-                                            {reporters.map((name, idx) => (
-                                                <MenuItem key={idx} value={name}>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Avatar {...stringAvatar(name)} />
-                                                        <Typography marginLeft={1}>{name}</Typography>
-                                                    </div>
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                            {
+                                                reporters.map((name, idx) => (
+                                                    <MenuItem key={idx} value={name}>
+                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Avatar {...stringAvatar(name)} />
+                                                            <Typography marginLeft={1}>{name}</Typography>
+                                                        </div>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </Select >
+                                    </FormControl >
 
-                                </Box>
-                            </Box>
+                                </Box >
+                            </Box >
 
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem' }}>
                                 <Button onClick={closeModal} variant='outlined' color='error' sx={{
@@ -189,11 +194,11 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                 </Button>
                             </Box>
 
-                        </Box>
-                    </Box>
-                </Box>
-            </Fade>
-        </Modal>
+                        </Box >
+                    </Box >
+                </Box >
+            </Fade >
+        </Modal >
     )
 }
 

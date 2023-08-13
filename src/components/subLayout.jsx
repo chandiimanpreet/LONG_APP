@@ -5,15 +5,27 @@ import MyModal from './MyModal';
 import SingleItem from './item'
 import { Droppable } from '@hello-pangea/dnd'
 import { BsPlus } from 'react-icons/bs'
+import { addTicket } from '../backend/api/tickets';
 
-const SubLayout = ({ board, bIndex, theme }) => {
+const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
 
-    const [boardData, setBoardData] = useState(BoardData);
-    const [selectedBoard, setSelectedBoard] = useState(0);
+    const [boarddata, setBoardData] = useState(BoardData);
+    const [selectedBoard, setSelectedBoard] = useState(null);
     const [open, setOpen] = useState(false);
 
-    const openModal = () => { setOpen(true); }
-    const closeModal = () => { setOpen(false); }
+
+    const openModal = () => {
+        setOpen(true);
+    }
+    const closeModal = () => {
+        setOpen(false);
+    }
+
+    const getModalDataFromModal = async (modalData) => {
+        const newData = await addTicket(modalData, selectedBoard.columnIndex, selectedBoard.columnName, boardData)
+        setBoard(newData)
+    }
+
 
     const createGuidId = () => {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -22,12 +34,7 @@ const SubLayout = ({ board, bIndex, theme }) => {
         });
     };
 
-    const getModalDataFromModal = (modalData) => {
-        onTextAreaKeyPress(modalData)
-    }
-
     const onTextAreaKeyPress = (data) => {
-
         const val = data.text;
         if (val.length !== 0) {
 
@@ -76,12 +83,12 @@ const SubLayout = ({ board, bIndex, theme }) => {
                         </div>
                         <div className="flex justify-center">
                             <button className="flex  my-3 space-x-2 text-lg relative" >
-                                <BsPlus id={Object.keys(board)[0]} onClick={(e) => {
-                                    setSelectedBoard(board.id);
-                                    openModal();
-                                }}
+                            <BsPlus id={Object.keys(board)[0]} onClick={(e) => {
+                                setSelectedBoard({ columnIndex: bIndex, columnName: Object.keys(board)[0] });
+                                openModal();
+                            }}
                                 className="text-4xl absolute bg-black relative text-white rounded-full" />
-                            </button>
+                        </button>
                         </div>
 
                         {
