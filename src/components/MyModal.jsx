@@ -4,17 +4,12 @@ import {
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress, getModalDataFromModal }) => {
-
-    const assignees = ['Manpreet Singh', 'Gautam Kumar', 'Roshan Singh', 'Somnath Das', 'Pranav Rastagi', 'Rahul Shah',
-        'Arshdeep Singh', 'Priyanshu Maikhuri', 'Raj Kumar', 'Aakash Kshyap', 'Himalay Das', 'Chaavi Jain', 'Komal Bairwa'];
-
-    const reporters = ['Pranav Rastagi', 'Rahul Shah', 'Himalay Das'];
+const MyModal = ({ boardData, open, data, theme, closeModal, getModalDataFromModal }) => {
 
     const [modalData, setmodalData] = useState({
         title: '',
         assignee: '',
-        reporterName: '',
+        reporter: '',
         description: '',
         priority: 0,
     });
@@ -78,7 +73,7 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length>1?name.split(' ')[1][0].toUpperCase():''}`,
         };
     }
 
@@ -130,11 +125,21 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                             MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
                                             {
-                                                assignees.map((name, idx) => (
-                                                    <MenuItem key={idx} value={name}>
+                                                Object.keys(boardData.member).length > 0 && Object.keys(boardData.member).map((ele, idx) => (
+                                                    <MenuItem key={idx} value={boardData.member[ele]}>
                                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <Avatar {...stringAvatar(name)} />
-                                                            <Typography marginLeft={1}>{name}</Typography>
+                                                            <Avatar {...stringAvatar(boardData.member[ele])} />
+                                                            <Typography marginLeft={1}>{boardData.member[ele]}</Typography>
+                                                        </div>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                            {
+                                                Object.keys(boardData.owner).length > 0 && Object.keys(boardData.owner).map((ele, idx) => (
+                                                    <MenuItem key={idx} value={boardData.owner[ele]}>
+                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Avatar {...stringAvatar(boardData.owner[ele])} />
+                                                            <Typography marginLeft={1}>{boardData.owner[ele]}</Typography>
                                                         </div>
                                                     </MenuItem>
                                                 ))
@@ -153,18 +158,18 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                             sx={textFieldStyle}
                                             labelId="reporterID"
                                             id="simple"
-                                            name='reporterName'
-                                            value={modalData.reporterName}
+                                            name='reporter'
+                                            value={modalData.reporter}
                                             label="Reporter"
                                             onChange={dataHandler}
                                             MenuProps={{ style: { maxHeight: '60vh', maxWidth: '16vw' } }}
                                         >
                                             {
-                                                reporters.map((name, idx) => (
-                                                    <MenuItem key={idx} value={name}>
+                                                Object.keys(boardData.owner).length > 0 && Object.keys(boardData.owner).map((ele, idx) => (
+                                                    <MenuItem key={idx} value={ele}>
                                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <Avatar {...stringAvatar(name)} />
-                                                            <Typography marginLeft={1}>{name}</Typography>
+                                                            <Avatar {...stringAvatar(boardData.owner[ele])} />
+                                                            <Typography marginLeft={1}>{boardData.owner[ele]}</Typography>
                                                         </div>
                                                     </MenuItem>
                                                 ))
