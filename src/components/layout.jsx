@@ -51,7 +51,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
         p: 6,
         color: theme === 'dark' ? 'white' : 'black',
         background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
-        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+        // boxShadow: theme === 'dark' ? '12px 12px 24px #0b0d0f, -12px -12px 24px #2d353d' : '12px 12px 24px #494949, -12px -12px 24px #ffffff',
     };
 
     const textFieldStyle = {
@@ -132,7 +132,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                     <DragDropContext
                         onDragEnd={onDragEnd}
                     >
-                        <div className="w-full blend flex">
+                        <Box width='100%' className=" blend flex">
                             {
                                 boardData.ticketsEntity && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
@@ -140,7 +140,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                     );
                                 })
                             }
-                        </div>
+                        </Box>
                     </DragDropContext>
                 )
             }
@@ -154,15 +154,15 @@ function Layout({ theme, userData, boardData, setBoard }) {
             >
                 <Fade in={open}>
                     <Box sx={style}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{ display: 'flex',gap: '1rem', flexDirection: 'column' }}>
                             <Typography variant='h5' >Add Member</Typography>
                             <TextField name='name' type='text' required id="outlined-controlled" label="Name" value={data.name}
-                                onChange={dataHandler} sx={{ marginBottom: '1rem', marginTop: '1rem' }}
+                                onChange={dataHandler} sx={textFieldStyle}
                             />
                             <TextField name='email' type='email' required id="outlined-controlled" label="Email" value={data.email}
-                                onChange={dataHandler} sx={{ marginBottom: '1rem' }}
+                                onChange={dataHandler} sx={textFieldStyle}
                             />
-                            <FormControl fullWidth>
+                            <FormControl sx={textFieldStyle} fullWidth>
                                 <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
                                 <Select name='permission' labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
                                     value={data.permission} label="Permission"

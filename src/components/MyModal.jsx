@@ -29,7 +29,7 @@ const MyModal = ({ boardData, open, data, theme, closeModal, getModalDataFromMod
         padding: '2rem',
         color: theme === 'dark' ? 'white' : 'black',
         background: theme === 'dark' ? 'linear-gradient(145deg, #282E33, #282E33)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
-        boxShadow: theme === 'dark' ? '0 0 0 1px rgba(9, 30, 66, 0.08), 0 2px 1px rgba(9, 30, 66, 0.08), 0 0 20px -6px rgba(9, 30, 66, 0.31)' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+        // boxShadow: theme === 'dark' ? '12px 12px 24px #0b0d0f, -12px -12px 24px #2d353d' : '12px 12px 24px #494949, -12px -12px 24px #ffffff',
     };
     const textFieldStyle = {
         color: theme === 'dark' ? 'white' : 'black', // Text color
@@ -109,8 +109,8 @@ const MyModal = ({ boardData, open, data, theme, closeModal, getModalDataFromMod
 
                         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                             <Box sx={{ display: 'flex', marginBottom: '15px' }}>
-                                <Typography sx={{ margin: '1rem 4rem' }} >Assignee</Typography>
-                                <Box sx={{ minWidth: 240 }}>
+                                <Typography sx={{ margin: '1rem 3.85rem' }} >Assignee</Typography>
+                                <Box sx={{ minWidth: '15rem' }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="assigneeID">Assignee</InputLabel>
                                         <Select
@@ -150,7 +150,7 @@ const MyModal = ({ boardData, open, data, theme, closeModal, getModalDataFromMod
                             </Box >
                             <Box sx={{ display: 'flex', }}>
                                 <Typography sx={{ margin: '1rem 4rem' }} >Reporter</Typography>
-                                <Box sx={{ minWidth: 240 }}>
+                                <Box sx={{ minWidth: '15rem' }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="reporterID">Reporter</InputLabel>
                                         <Select
@@ -180,20 +180,12 @@ const MyModal = ({ boardData, open, data, theme, closeModal, getModalDataFromMod
                                 </Box >
                             </Box >
 
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem' }}>
-                                <Button onClick={closeModal} variant='outlined' color='error' sx={{
-                                    marginRight: '1rem',
-                                    fontWeight: 'bold',
-                                    borderWidth: '2px',
-                                }}>Cancel</Button>
+                            <Box sx={{ display: 'flex', gap: '3rem', justifyContent: 'flex-end', marginTop: '2rem' }}>
+                                <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
 
-                                <Button variant='outlined' color='success' onClick={() => {
+                                <Button variant='contained' color='success' onClick={() => {
                                     getModalDataFromModal(modalData);
                                     closeModal();
-                                }} sx={{
-                                    marginRight: '1rem',
-                                    fontWeight: 'bold',
-                                    borderWidth: '2px',
                                 }}>
                                     {data.id !== undefined ? 'Save' : 'Create'}
                                 </Button>
