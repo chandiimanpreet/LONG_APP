@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import "./components.css"
 import BoardData from "../backend/boardData.json";
 import MyModal from './MyModal';
@@ -12,34 +12,21 @@ const SubLayout = ({ board, bIndex, theme }) => {
     const [selectedBoard, setSelectedBoard] = useState(0);
     const [open, setOpen] = useState(false);
 
-
-    const openModal = () => {
-        setOpen(true);
-    }
-    const closeModal = () => {
-        setOpen(false);
-    }
-
-    const getModalDataFromModal = (modalData) => {
-        onTextAreaKeyPress(modalData)
-    }
-    console.log(34535)
-
-    useEffect(() => {
-        console.log(board)
-
-    }, [board]);
+    const openModal = () => { setOpen(true); }
+    const closeModal = () => { setOpen(false); }
 
     const createGuidId = () => {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
             return v.toString(16);
         });
+    };
+
+    const getModalDataFromModal = (modalData) => {
+        onTextAreaKeyPress(modalData)
     }
 
     const onTextAreaKeyPress = (data) => {
-
-        console.log(data);
 
         const val = data.text;
         if (val.length !== 0) {
@@ -61,10 +48,9 @@ const SubLayout = ({ board, bIndex, theme }) => {
     };
 
     return (
-        <div key={Object.keys(board)[0]}
-            className={`flex flex-col w-full h-full pb-2 py-2 px-2 m-2 rounded-lg`}
-        >
-            {console.log(534535)}
+        <div key={Object.keys(board)[0]} style={{ backgroundColor: ' #161A1D #F4F5F7'}}
+            className={`flex flex-col w-full h-full pb-2 py-2 px-2 m-2 rounded-lg `}
+        >           
             <Droppable droppableId={bIndex.toString()}>
                 {(provided, snapshot) => (
                     <div
@@ -72,8 +58,7 @@ const SubLayout = ({ board, bIndex, theme }) => {
                         ref={provided.innerRef}
                         className={`dark:text-white rounded-md blend h-full`}
                     >
-
-                        <h1 className={`text-3 px-2 font-bold xl py-5 text-center uppercase`}>
+                        <h1 className={`text-3 px-2  xl py-5 text-center uppercase`}>
                             {Object.keys(board)[0]}
                         </h1>
                         {/* <DotsVerticalIcon className="w-5 h-5 text-gray-500" /> */}
@@ -89,22 +74,15 @@ const SubLayout = ({ board, bIndex, theme }) => {
                                 })}
                             {provided.placeholder}
                         </div>
-                        {
-                            console.log(Object.keys(board)[0])
-                        }
                         <div className="flex justify-center">
-                            <button className="my-3 text-lg relative">
-                                <BsPlus
-                                    id={Object.keys(board)[0]}
-                                    onClick={(e) => {
-                                        setSelectedBoard(board.id);
-                                        openModal();
-                                    }}
-                                    className="text-4xl absolute bg-black relative text-white rounded-full"
-                                />
+                            <button className="flex  my-3 space-x-2 text-lg relative" >
+                                <BsPlus id={Object.keys(board)[0]} onClick={(e) => {
+                                    setSelectedBoard(board.id);
+                                    openModal();
+                                }}
+                                className="text-4xl absolute bg-black relative text-white rounded-full" />
                             </button>
                         </div>
-
 
                         {
                             open && (

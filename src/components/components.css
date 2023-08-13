@@ -7,15 +7,33 @@
         -20px -20px 60px #f6f6f6;
 }
 
-
 .shadow-dark {
     border: 1px solid #1c2126;
     transition: all .3s;
     border-radius: 0.6em;
     background: linear-gradient(145deg, #1e2329, #232a30);
-    box-shadow:  20px 20px 60px #1c2126,
-                 -20px -20px 60px #262d34;
+    box-shadow: 20px 20px 60px #1c2126,
+        -20px -20px 60px #262d34;
 }
+
+.shadow-dark-item {
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: var(--ds-space-025, 2px) 0;
+    border-radius: 3px;
+    box-shadow:  0 1px 1px rgba(23, 43, 77, 0.2), 0 0 1px rgba(23, 43, 77, 0.2);
+    transition: background-color 140ms ease-in-out 0s, color 140ms ease-in-out 0s;
+    background-color: #22272B #FFFFFF;
+    color: #B6C2CF, #172B4D;
+    filter: none;
+    width: 17vw;
+}
+
+;
 
 .blend {
     background: none;
