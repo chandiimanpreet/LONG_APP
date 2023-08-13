@@ -10,45 +10,6 @@ function SingleItem({ data, index, theme }) {
     const openModal = () => { setOpen(true); }
     const closeModal = () => { setOpen(false); }
 
-    // const handleChange = event => {
-    //     setText(event.target.value);
-    // };
-
-    // const style = {
-    //     position: 'absolute',
-    //     top: '40%',
-    //     left: '50%',
-    //     transform: 'translate(-50%, -50%)',
-    //     width: 1200,
-    //     boxShadow: 10,
-    //     borderRadius: '10px',
-    //     border: '2px solid #000',
-    //     p: 4,
-    //     color: theme === 'dark' ? 'white' : 'black',
-    //     background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
-    //     boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
-    // };
-
-    // const textFieldStyle = {
-    //     color: theme === 'dark' ? 'white' : 'black', // Text color
-    //     '& .MuiInputLabel-root': {
-    //         color: theme === 'dark' ? 'white' : 'black', // Label color
-    //     },
-    //     '& .MuiInputBase-input': {
-    //         color: theme === 'dark' ? 'white' : 'black', // Input text color
-    //     },
-    //     '& .MuiOutlinedInput-notchedOutline': {
-    //         borderColor: theme === 'dark' ? 'white' : 'black', // Border color
-    //     },
-    //     '& .MuiInputBase-input.Mui-disabled': {
-    //         color: theme === 'dark' ? 'white' : 'black', // Disabled input text color
-    //     },
-    // };
-
-    // const onTextAreaKeyPress = (e) => {
-    //     console.log(e.target.value)
-    // }
-
     function stringToColor(string) {
         let hash = 0;
         let i;
@@ -72,7 +33,7 @@ function SingleItem({ data, index, theme }) {
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length>1?name.split(' ')[1][0].toUpperCase():''}`,
         };
     }
 
@@ -89,7 +50,7 @@ function SingleItem({ data, index, theme }) {
                             <div className="flex justify-between mt-1">
                                 <p className='mt-4'>EG-{data[0]}</p>
                                 <Avatar sx={{ width: '2rem !important', height: '2rem !important', }}
-                                    {...stringAvatar('Manpreet Singh')} />
+                                    {...stringAvatar(data[2])} />
                             </div>
                         </div>
                     </Fragment>

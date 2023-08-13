@@ -20,11 +20,30 @@ export const loginUser = () => {
         const docRef = doc(db, "user", auth.currentUser.uid);
         const userData = await getDoc(docRef);
         if (userData.exists()) {
-            resolve({ uid: auth.currentUser.uid, ...userData.data()});
+            resolve({ uid: auth.currentUser.uid, ...userData.data() });
         } else {
-            const data = { uid: auth.currentUser.uid, email: auth.currentUser.email, boards: [],name:"Gautam"};
+            const data = { uid: auth.currentUser.uid, email: auth.currentUser.email, boards: [], name: "Gautam" };
             await setDoc(docRef, data);
             resolve(data);
+        }
+    })
+}
+export const addMember = (data, boarData) => {
+    return new Promise(async (resolve, reject) => {
+        const docRef = doc(db, "boards", boarData.boardName);
+        let newData;
+        if (data.permission === "Owner") {
+            newData = { ...boarData.owner, [data.email]:data.name }
+            await setDoc(docRef, {
+                "owner": newData
+            }, { merge: true });
+            resolve({ ...boarData, owner: newData });
+        } else {
+            newData = { ...boarData.member, [data.email]: data.name }
+            await setDoc(docRef, {
+                "member": newData
+            }, { merge: true });
+            resolve({ ...boarData, member: newData });
         }
     })
 }

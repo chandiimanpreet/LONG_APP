@@ -6,9 +6,9 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
+import { addMember } from '../backend/api/user';
 
-function Layout({ theme, userData, boardData ,setBoard}) {
-    console.log(boardData);
+function Layout({ theme, userData, boardData, setBoard }) {
 
     const [ready, setReady] = useState(false);
     const [open, setOpen] = useState(false);
@@ -22,9 +22,14 @@ function Layout({ theme, userData, boardData ,setBoard}) {
     const closeModal = () => { setOpen(false); }
 
     const dataHandler = (e) => {
-        setData({ [e.target.name]: e.target.value });
+        setData({ ...data, [e.target.name]: e.target.value });
     }
-
+    const addNewMember = async () => {
+        closeModal();
+        const res = await addMember(data, boardData);
+        setData({ name: '', email: '', permission: '' });
+        setBoard({ ...res });
+    }
     useEffect(() => {
         if (process.browser) {
             setReady(true);
@@ -84,11 +89,12 @@ function Layout({ theme, userData, boardData ,setBoard}) {
     }
 
     const stringAvatar = (name) => {
+        
         return {
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length>1?name.split(' ')[1][0].toUpperCase():''}`,
         };
     }
 
@@ -102,15 +108,21 @@ function Layout({ theme, userData, boardData ,setBoard}) {
             </Fragment>
         )
     }
-
     return (
         <div className="dark:bg-[#161a1d]">
 
             <Box sx={{ display: 'flex', }}>
-                <AvatarGroup total={11} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
-                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Manpreet Singh')} />
-                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Roshan Singh')} />
-                    <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('Arshdeep Singh')} />
+                <AvatarGroup total={Object.keys(boardData.owner).length+Object.keys(boardData.member).length} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
+                    {
+                        boardData && Object.keys(boardData.owner).map((owner) => {
+                            return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
+                        })
+                    }
+                    {
+                        boardData && Object.keys(boardData.member).map((member) => {
+                            return <Avatar key={member} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["member"][member])} />
+                        })
+                    }
                 </AvatarGroup>
                 <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold' }} onClick={openModal} > <AddIcon /> Add member</Button>
             </Box>
@@ -121,7 +133,6 @@ function Layout({ theme, userData, boardData ,setBoard}) {
                         onDragEnd={onDragEnd}
                     >
                         <div className="w-full blend flex">
-                            {console.log(boardData)}
                             {
                                 boardData.ticketsEntity && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
@@ -145,15 +156,15 @@ function Layout({ theme, userData, boardData ,setBoard}) {
                     <Box sx={style}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='h5' >Add Member</Typography>
-                            <TextField required id="outlined-controlled" label="Name" value={data.name}
+                            <TextField name='name' type='text' required id="outlined-controlled" label="Name" value={data.name}
                                 onChange={dataHandler} sx={{ marginBottom: '1rem', marginTop: '1rem' }}
                             />
-                            <TextField required id="outlined-controlled" label="Email" value={data.email}
+                            <TextField name='email' type='email' required id="outlined-controlled" label="Email" value={data.email}
                                 onChange={dataHandler} sx={{ marginBottom: '1rem' }}
                             />
                             <FormControl fullWidth>
                                 <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
-                                <Select labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
+                                <Select name='permission' labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
                                     value={data.permission} label="Permission"
                                 >
                                     <MenuItem value={'Owner'}>Owner</MenuItem>
@@ -163,7 +174,7 @@ function Layout({ theme, userData, boardData ,setBoard}) {
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
                             <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
-                            <Button variant='contained' color='success'>Add</Button>
+                            <Button onClick={addNewMember} variant='contained' color='success'>Add</Button>
                         </Box>
                     </Box>
                 </Fade>
