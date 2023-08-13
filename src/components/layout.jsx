@@ -8,20 +8,21 @@ import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 
 function Layout({ theme, userData, boardData }) {
-    console.log(boardData);
 
     const [ready, setReady] = useState(false);
-
+    const [open, setOpen] = useState(false);
     const [data, setData] = useState({
         name: '',
         email: '',
         permission: '',
     });
 
+    const openModal = () => { setOpen(true); }
+    const closeModal = () => { setOpen(false); }
+
     const dataHandler = (e) => {
         setData({ [e.target.name]: e.target.value });
     }
-
 
     useEffect(() => {
         if (process.browser) {
@@ -29,20 +30,12 @@ function Layout({ theme, userData, boardData }) {
         }
     }, []);
 
-
     const onDragEnd = async (re) => {
         if (!re.destination) return;
         await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData.boardName, boardData);
         // setBoardData(newBoardData);
     };
-    const [open, setOpen] = useState(false);
 
-    const openModal = () => {
-        setOpen(true);
-    }
-    const closeModal = () => {
-        setOpen(false);
-    }
     const style = {
         position: 'absolute',
         top: '40%',
@@ -72,11 +65,10 @@ function Layout({ theme, userData, boardData }) {
         },
     };
 
-    function stringToColor(string) {
+    const stringToColor = (string) => {
         let hash = 0;
         let i;
 
-        /* eslint-disable no-bitwise */
         for (i = 0; i < string.length; i += 1) {
             hash = string.charCodeAt(i) + ((hash << 5) - hash);
         }
@@ -87,12 +79,11 @@ function Layout({ theme, userData, boardData }) {
             const value = (hash >> (i * 8)) & 0xff;
             color += `00${value.toString(16)}`.slice(-2);
         }
-        /* eslint-enable no-bitwise */
 
         return color;
     }
 
-    function stringAvatar(name) {
+    const stringAvatar = (name) => {
         return {
             sx: {
                 bgcolor: stringToColor(name),
@@ -111,6 +102,7 @@ function Layout({ theme, userData, boardData }) {
             </Fragment>
         )
     }
+
     return (
         <div className="dark:bg-[#161a1d]">
 
@@ -138,67 +130,44 @@ function Layout({ theme, userData, boardData }) {
                             }
                         </div>
                     </DragDropContext>
-                )}
-
-            {
-                open && (
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        open={open}
-                        onClose={closeModal}
-                        closeAfterTransition
-                        slots={{ backdrop: Backdrop }}
-                        slotProps={{
-                            backdrop: {
-                                timeout: 500,
-                            },
-                        }}
-                    >
-                        <Fade in={open}>
-                            <Box sx={style}>
-                                <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                                    <Typography variant='h5' >Add Member</Typography>
-                                    <TextField required
-                                        sx={textFieldStyle}
-                                        label="Name"
-                                        value={data.name}
-                                        onChange={dataHandler}
-                                    />
-                                    <TextField required
-                                        sx={textFieldStyle}
-                                        label="Email"
-                                        value={data.email}
-                                        onChange={dataHandler}
-                                    />
-                                    <FormControl fullWidth sx={textFieldStyle}>
-                                        <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={data.permission}
-                                            label="Permission"
-                                            onChange={dataHandler}
-                                        >
-                                            <MenuItem value={'Owner'}>Owner</MenuItem>
-                                            <MenuItem value={'Editor'}>Editor</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
-                                    <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
-                                    <Button variant='contained' color='success'>Add</Button>
-                                </Box>
-                            </Box>
-                        </Fade>
-                    </Modal>
                 )
-
             }
 
-        </div >
-
-
+            <Modal
+                open={open}
+                onClose={closeModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{ backdrop: { timeout: 500, }, }}
+            >
+                <Fade in={open}>
+                    <Box sx={style}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography variant='h5' >Add Member</Typography>
+                            <TextField required id="outlined-controlled" label="Name" value={data.name}
+                                onChange={dataHandler} sx={{ marginBottom: '1rem', marginTop: '1rem' }}
+                            />
+                            <TextField required id="outlined-controlled" label="Email" value={data.email}
+                                onChange={dataHandler} sx={{ marginBottom: '1rem' }}
+                            />
+                            <FormControl fullWidth>
+                                <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
+                                <Select labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
+                                    value={data.permission} label="Permission"
+                                >
+                                    <MenuItem value={'Owner'}>Owner</MenuItem>
+                                    <MenuItem value={'Editor'}>Editor</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
+                            <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
+                            <Button variant='contained' color='success'>Add</Button>
+                        </Box>
+                    </Box>
+                </Fade>
+            </Modal>
+        </div>
     )
 }
 

@@ -16,7 +16,7 @@ function MainNavBar({setUserData,theme,setTheme}) {
     };
 
     return (
-        <div className='justify-between '>
+        <div className='justify-between'>
             <header className='flex  justify-between dark:bg-[#1d2125] p-5 shadow-lg sticky top-0  z-10 '>
                 <h1 className='text-4xl bg-back dark:text-white dark:bg-[#1d2125] font-bold '>Long app</h1>
 
@@ -45,7 +45,7 @@ function MainNavBar({setUserData,theme,setTheme}) {
                         className='rounded-full  cursor-pointer h-12 w-12'
                     />
                     <br />
-                    <button onClick={() => {auth.signOut();setUserData(null);}} className=' logout-btn'>sign out</button>
+                    <button onClick={() => {auth.signOut();setUserData(null);}} className='logout-btn'>Sign out</button>
                 </div>
             </header>
         </div>

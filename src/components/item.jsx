@@ -6,16 +6,9 @@ import MyModal from './MyModal';
 
 function SingleItem({ data, index, theme }) {
 
-
     const [open, setOpen] = useState(false);
-    
-
-    const openModal = () => {
-        setOpen(true);
-    }
-    const closeModal = () => {
-        setOpen(false);
-    }
+    const openModal = () => { setOpen(true); }
+    const closeModal = () => { setOpen(false); }
 
     // const handleChange = event => {
     //     setText(event.target.value);
@@ -60,7 +53,6 @@ function SingleItem({ data, index, theme }) {
         let hash = 0;
         let i;
 
-        /* eslint-disable no-bitwise */
         for (i = 0; i < string.length; i += 1) {
             hash = string.charCodeAt(i) + ((hash << 5) - hash);
         }
@@ -71,7 +63,6 @@ function SingleItem({ data, index, theme }) {
             const value = (hash >> (i * 8)) & 0xff;
             color += `00${value.toString(16)}`.slice(-2);
         }
-        /* eslint-enable no-bitwise */
 
         return color;
     }
@@ -90,21 +81,18 @@ function SingleItem({ data, index, theme }) {
             <Draggable index={index} draggableId={data[0].toString()}>
                 {(provided) => (
                     <Fragment>
-                        <div
-                            onClick={openModal}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
+                        <div onClick={openModal} ref={provided.innerRef} {...provided.draggableProps}                        
                             {...provided.dragHandleProps}
-                            className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'}   px-10 pt-5 pb-3 m-3`}
+                            className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark-item'} min-w-fit px-10 pt-5 pb-3 m-3`}
                         >
                             <h1 className='text-3 bg-red blend  pb-8'>{data[1]}</h1>
                             <div className="flex justify-between mt-1">
                                 <p className='mt-4'>EG-{data[0]}</p>
-                                <Avatar sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar('hello fdgdf')} />
+                                <Avatar sx={{ width: '2rem !important', height: '2rem !important', }}
+                                    {...stringAvatar('Manpreet Singh')} />
                             </div>
                         </div>
                     </Fragment>
-
                 )}
             </Draggable>
 

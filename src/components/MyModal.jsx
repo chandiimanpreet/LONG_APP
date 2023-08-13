@@ -26,17 +26,15 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
     const style = {
         position: 'absolute',
         borderRadius: '20px',
-        top: '30%',
+        top: '40%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 1200,
-        border: '2px solid #000',
-        padding: '16px',
+        width: '1200',
+        padding: '2rem',
         color: theme === 'dark' ? 'white' : 'black',
-        background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
-        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+        background: theme === 'dark' ? 'linear-gradient(145deg, #282E33, #282E33)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
+        boxShadow: theme === 'dark' ? '0 0 0 1px rgba(9, 30, 66, 0.08), 0 2px 1px rgba(9, 30, 66, 0.08), 0 0 20px -6px rgba(9, 30, 66, 0.31)' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
     };
-
     const textFieldStyle = {
         color: theme === 'dark' ? 'white' : 'black', // Text color
         '& .MuiInputLabel-root': {
@@ -90,7 +88,7 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
             <Fade in={open}>
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <textarea className="border-gray-300 bg-[#cfcfcf] dark:bg-[#20262d] rounded focus:ring-purple-400 w-1/2 text-3xl font-semibold"
+                        <textarea className="border-gray-300 bg-[#cfcfcf] dark:bg-[#282E33] rounded focus:ring-purple-400 w-1/2 text-3xl font-semibold"
                             name='text'
                             value={data.title !== '' ? data.title : modalData.text}
                             onChange={dataHandler} placeholder='Ticket Name' />
@@ -120,6 +118,7 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                     <FormControl fullWidth>
                                         <InputLabel id="assigneeID">Assignee</InputLabel>
                                         <Select
+                                            SelectDisplayProps={{ style: { display: 'flex' } }}
                                             sx={textFieldStyle}
                                             labelId="assigneeID"
                                             id="demo"
@@ -147,6 +146,7 @@ const MyModal = ({ open, data, theme, openModal, closeModal, onTextAreaKeyPress,
                                     <FormControl fullWidth>
                                         <InputLabel id="reporterID">Reporter</InputLabel>
                                         <Select
+                                            SelectDisplayProps={{ style: { display: 'flex' } }}
                                             sx={textFieldStyle}
                                             labelId="reporterID"
                                             id="simple"
