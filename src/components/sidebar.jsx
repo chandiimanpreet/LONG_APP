@@ -31,10 +31,9 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
         transform: 'translate(-50%, -50%)',
         width: 400,
         zIndex: 1300,
-        border: '2px solid #000',
         p: 4,
         background: theme === 'dark' ? 'linear-gradient(145deg, #1e2329, #232a30)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
-        boxShadow: theme === 'dark' ? '20px 20px 60px #3e3e3e, -20px -20px 60px #9e9e9e' : '20px 20px 60px #b6b6b6, -20px -20px 60px #f6f6f6',
+        // boxShadow: theme === 'dark' ? '12px 12px 24px #0b0d0f, -12px -12px 24px #2d353d' : '12px 12px 24px #494949, -12px -12px 24px #ffffff',
     };
 
     const textFieldStyle = {
@@ -89,8 +88,9 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
     return (
 
         <>
-            <div className='dark:bg-[#161a1d]'>
-                <div className={`bg-white ${theme === 'light' ? 'shadow' : ''} dark:bg-[#21272d] color-red h-screen duration-200 p-5 pt-8 ${sideopen ? "w-72" : "w-20"} m-2 relative`}>
+            <div>
+                <div className={` ${theme === 'light' ? 'shadow' : ''} dark:bg-[#21272d] color-red h-screen duration-200 p-5 pt-8 ${sideopen ? "w-fill" : "w-20"} m-2 relative`} style={{ borderRadius: '0.6em' }}>
+
                     {
                         !sideopen ? <BsArrowRightShort className='text-4xl bg-black text-white 
                     absolute rounded-full -right-3 top-9' onClick={clickRightArrow} /> : <BsArrowLeftShort className='text-4xl bg-black text-white 
@@ -124,14 +124,7 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                                 fullWidth />
 
                             <br /> <br />
-                            <Button type='submit' variant="outlined" sx={{
-                                fontWeight: "bold",
-                                borderColor: 'green',
-                                color: 'green',
-                                width: "8rem",
-                                border: '2px solid green',
-                            }}>
-                                <AddCircleRoundedIcon />
+                            <Button type='submit' variant="contained" color='success'>
                                 Create</Button>
                         </Box>
                     </Modal>
@@ -142,7 +135,7 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
                             <button className='text-lg font-semibold rounded-md' style={{
                                 color: theme === 'dark' ? 'white' : 'black',
                                 border: theme === 'dark' ? '3px solid white' : '3px solid black',
-                                width: "15rem",
+                                width: "98%",
                                 height: "3rem",
                                 position: "relative",
                                 left: "-4px",

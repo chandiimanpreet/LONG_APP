@@ -2,17 +2,12 @@
 
 .logout-btn {
   margin-left: 2em;
-  color: white;
-  padding: 0.1em 1em;
+  color: black;
+  padding: 0.8rem;
   font-size: 18px;
   font-weight: 500;
   border-radius: 0.5em;
-  background: red;
-  /* border: 1px solid white; */
   transition: all .3s;
-  background: #e02a32;
-  /* box-shadow: 20px 20px 60px #be242b,
-    -20px -20px 60px #ff303a; */
 }
 
 .logout-btn:hover {

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../backend/firebase'
-function MainNavBar({setUserData,theme,setTheme,setBoard}) {
+import { Box } from '@mui/system'
+function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
     const [user] = useAuthState(auth);
     useEffect(() => {
         if (theme === 'dark') {
@@ -16,7 +17,7 @@ function MainNavBar({setUserData,theme,setTheme,setBoard}) {
     };
 
     return (
-        <div className='justify-between'>
+        <Box className='justify-between '>
             <header className='flex  justify-between dark:bg-[#1d2125] p-5 shadow-lg sticky top-0  z-10 '>
                 <h1 className='text-4xl bg-back dark:text-white dark:bg-[#1d2125] font-bold '>Long app</h1>
 
@@ -45,10 +46,18 @@ function MainNavBar({setUserData,theme,setTheme,setBoard}) {
                         className='rounded-full  cursor-pointer h-12 w-12'
                     />
                     <br />
-                    <button onClick={() => {auth.signOut();setUserData(null);setBoard(null);}} className=' logout-btn'>sign out</button>
+                    <div className="flex items-center">
+                        <button onClick={() => { auth.signOut(); setUserData(null); setBoard(null); }} className='logout-btn dark:text-white flex items-center'>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                            </svg>
+                            <span className="ml-1">Sign out</span>
+                        </button>
+                    </div>
+
                 </div>
             </header>
-        </div>
+        </Box>
     );
 }
 
