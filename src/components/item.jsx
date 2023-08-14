@@ -5,7 +5,7 @@ import { Avatar, } from '@mui/material';
 import MyModal from './MyModal';
 import { Typography } from '@mui/material';
 
-function SingleItem({ data, index, theme }) {
+function SingleItem({ data, index, theme ,boardData}) {
 
     const [open, setOpen] = useState(false);
     const openModal = () => { setOpen(true); }
@@ -59,7 +59,7 @@ function SingleItem({ data, index, theme }) {
 
             {
                 open && (
-                    <MyModal theme={theme} open={open} data={data} openModal={openModal} closeModal={closeModal} />
+                    <MyModal boardData={boardData} theme={theme} open={open} id={data[0]} openModal={openModal} closeModal={closeModal} />
                 )
             }
 

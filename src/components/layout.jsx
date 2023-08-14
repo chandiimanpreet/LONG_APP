@@ -153,7 +153,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                 slotProps={{ backdrop: { timeout: 500, }, }}
             >
                 <Fade in={open}>
-                    <Box sx={style}>
+                    <Box component='form' onSubmit={(e)=>{e.preventDefault();addNewMember()}} sx={style}>
                         <Box sx={{ display: 'flex',gap: '1rem', flexDirection: 'column' }}>
                             <Typography variant='h5' >Add Member</Typography>
                             <TextField name='name' type='text' required id="outlined-controlled" label="Name" value={data.name}
@@ -164,7 +164,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             />
                             <FormControl sx={textFieldStyle} fullWidth>
                                 <InputLabel required id="demo-simple-select-label">Permission</InputLabel>
-                                <Select name='permission' labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
+                                <Select required name='permission' labelId="demo-simple-select-label" id="demo-simple-select" onChange={dataHandler}
                                     value={data.permission} label="Permission"
                                 >
                                     <MenuItem value={'Owner'}>Owner</MenuItem>
@@ -173,8 +173,8 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             </FormControl>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
-                            <Button onClick={closeModal} variant='contained' color='error'>Cancel</Button>
-                            <Button onClick={addNewMember} variant='contained' color='success'>Add</Button>
+                            <Button type='button' onClick={closeModal} variant='contained' color='error'>Cancel</Button>
+                            <Button type='submit' variant='contained' color='success'>Add</Button>
                         </Box>
                     </Box>
                 </Fade>
