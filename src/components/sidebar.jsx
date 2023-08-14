@@ -89,7 +89,7 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
 
         <>
             <div>
-                <div className={` ${theme === 'light' ? 'shadow' : ''} dark:bg-[#21272d] color-red h-screen duration-200 p-5 pt-8 ${sideopen ? "w-fill" : "w-20"} m-2 relative`} style={{ borderRadius: '0.6em' }}>
+                <div className={` ${theme === 'light' ? 'shadow' : ''} dark:bg-[#21272d] color-red h-screen duration-200 p-5 pt-8 ${sideopen ? "w-72" : "w-20"} m-2 relative`} style={{ borderRadius: '0.6em' }}>
 
                     {
                         !sideopen ? <BsArrowRightShort className='text-4xl bg-black text-white 
