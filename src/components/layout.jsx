@@ -11,6 +11,8 @@ import { addMember } from '../backend/api/user';
 function Layout({ theme, userData, boardData, setBoard }) {
 
     const [ready, setReady] = useState(false);
+    const [newColumn, setNewColumn] = useState(false);
+    const [columnName, setColumnName] = useState('');
     const [open, setOpen] = useState(false);
     const [data, setData] = useState({
         name: '',
@@ -23,13 +25,15 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     const dataHandler = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
-    }
+    };
+
     const addNewMember = async () => {
         closeModal();
         const res = await addMember(data, boardData);
         setData({ name: '', email: '', permission: '' });
         setBoard({ ...res });
-    }
+    };
+
     useEffect(() => {
         if (process.browser) {
             setReady(true);
@@ -86,17 +90,17 @@ function Layout({ theme, userData, boardData, setBoard }) {
         }
 
         return color;
-    }
+    };
 
     const stringAvatar = (name) => {
-        
+
         return {
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length>1?name.split(' ')[1][0].toUpperCase():''}`,
+            children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length > 1 ? name.split(' ')[1][0].toUpperCase() : ''}`,
         };
-    }
+    };
 
 
     if (userData.boards.length === 0) {
@@ -108,11 +112,12 @@ function Layout({ theme, userData, boardData, setBoard }) {
             </Fragment>
         )
     }
+
     return (
         <div className="dark:bg-[#161a1d]">
 
             <Box sx={{ display: 'flex', }}>
-                <AvatarGroup total={Object.keys(boardData.owner).length+Object.keys(boardData.member).length} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
+                <AvatarGroup total={Object.keys(boardData.owner).length + Object.keys(boardData.member).length} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
                     {
                         boardData && Object.keys(boardData.owner).map((owner) => {
                             return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
@@ -129,32 +134,52 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
             {
                 ready && (
-                    <DragDropContext
-                        onDragEnd={onDragEnd}
-                    >
+                    <DragDropContext onDragEnd={onDragEnd}                    >
                         <Box width='100%' className=" blend flex">
                             {
                                 boardData.ticketsEntity && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
-                                        <SubLayout theme={theme} setBoard={setBoard} boardData={boardData} key={bIndex} board={board} bIndex={bIndex} />
+                                        <Fragment>
+                                            <SubLayout theme={theme} setBoard={setBoard} boardData={boardData} key={bIndex} board={board} bIndex={bIndex} />
+                                        </Fragment>
                                     );
                                 })
                             }
+                            <Box sx={{ marginTop: '2rem' }}>
+                                <AddIcon sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
+                            </Box>
                         </Box>
                     </DragDropContext>
                 )
             }
 
+            {/*Add new column Modal*/}
+            <Modal open={newColumn} onClose={() => { setNewColumn(false) }} closeAfterTransition
+                slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
+            >
+                <Fade in={newColumn}>
+                    <Box component='form' onSubmit={(e) => { e.preventDefault(); }} sx={style}>
+                        <Typography variant="h4" component="h2" mb={2}>Add new column</Typography>
+                        <TextField required fullWidth name='columnName' type='text' label="Column Name" value={columnName}
+                            onChange={(e) => { setColumnName(e.target.value) }} sx={textFieldStyle}
+                        />
+
+                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
+                            <Button type='button' onClick={() => { setNewColumn(false) }} variant='outlined' color='error'>Cancel</Button>
+                            <Button type='submit' variant='outlined' color='success'>Add</Button>
+                        </Box>
+                    </Box>
+                </Fade>
+            </Modal>
+
+            {/*Add members Modal*/}
             <Modal
-                open={open}
-                onClose={closeModal}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
+                open={open} onClose={closeModal} closeAfterTransition slots={{ backdrop: Backdrop }}
                 slotProps={{ backdrop: { timeout: 500, }, }}
             >
                 <Fade in={open}>
-                    <Box component='form' onSubmit={(e)=>{e.preventDefault();addNewMember()}} sx={style}>
-                        <Box sx={{ display: 'flex',gap: '1rem', flexDirection: 'column' }}>
+                    <Box component='form' onSubmit={(e) => { e.preventDefault(); addNewMember() }} sx={style}>
+                        <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
                             <Typography variant='h5' >Add Member</Typography>
                             <TextField name='name' type='text' required id="outlined-controlled" label="Name" value={data.name}
                                 onChange={dataHandler} sx={textFieldStyle}

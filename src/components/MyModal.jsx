@@ -115,18 +115,21 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
                                 <ClearIcon onClick={closeModal} sx={{ cursor: 'pointer' }} />
                             </Box>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Box sx={{ marginTop: '1rem' }}>
-                                        <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
-                                            rows={3} placeholder="Add a description" name='description'
-                                            value={modalData.description}
-                                            onChange={dataHandler} />
-                                    </Box>
-                                    <Box sx={{ marginTop: '2rem', }}>
-                                        {id > 0 && <Typography>Created At :- {new Date(ticketInfo.createdAt.seconds * 1000).toDateString() + " " + new Date(ticketInfo.createdAt.seconds * 1000).toLocaleTimeString()}</Typography>}
-                                    </Box>
-                                </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box sx={{ marginTop: '1rem' }}>
+                                <Typography>Description</Typography>
+                                <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
+                                    rows={3} placeholder="Add a description" name='description'
+                                    value={modalData.description}
+                                    onChange={dataHandler} />
+                            </Box>
+                            <Box sx={{ marginTop: '2rem', }}>
+                                <Typography>Created  </Typography>
+                                <br />
+                                <Typography>Updated </Typography>
+                            </Box>
+                        </Box>
 
                                 <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                                     <Box sx={{ display: 'flex', marginBottom: '15px' }}>
