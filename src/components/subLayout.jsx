@@ -46,7 +46,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                                 board[Object.keys(board)[0]].map((ticket, iIndex) => {
                                     const ticketData = ticket.split("-#$%-")
                                     return (
-                                        <SingleItem boardData={boardData} key={ticketData[0]} data={ticketData} index={iIndex} theme={theme} />
+                                        <SingleItem setBoard={setBoard} bIndex={bIndex} boardData={boardData} key={ticketData[0]} data={ticketData} index={iIndex} theme={theme} />
                                     );
                                 })}
                             {provided.placeholder}
@@ -64,7 +64,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
 
                         {
                             open && (
-                                <MyModal boardData={boardData} theme={theme} open={open} id={0} openModal={openModal} closeModal={closeModal}
+                                <MyModal setBoard={setBoard} boardData={boardData} ticketPosition={null} theme={theme} open={open} id={0} openModal={openModal} closeModal={closeModal}
                                     getModalDataFromModal={getModalDataFromModal} />
                             )
                         }

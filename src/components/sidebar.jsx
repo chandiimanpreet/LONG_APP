@@ -1,18 +1,13 @@
 import React from 'react'
-//import { AppBar, Toolbar, Button } from "@mui/material";
 import { useState } from 'react'
+import "./components.css"
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs"
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import { TextField, Box, Button, Typography, Modal, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useStyles } from "./style";
 import { addBoard, getBoard } from '../backend/api/board';
 
-function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
+function SideBar({ selected, setSelected, theme, userData, setUserData, setLoading, setBoard }) {
 
     // <div className={`${theme === 'light'? 'shadow': ''} dark:bg-[#21272d] h-screen duration-200 p-5 pt-8 ${open ? "w-72" : "w-20"} m-2 rounded-lg relative`}>
 
@@ -65,22 +60,20 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await addBoard({ name: project });
-            if (res.message !== "success") {
-                alert("Project name already exists");
-            } else {
-                handleClose();
-                setUserData({ ...userData, boards: [project, ...userData.boards] });
-                openBoardHandler(project);
-            }
+            const res = await addBoard({ name: project }, userData);
+            handleClose();
+            setUserData({ ...userData, boards: { [res.message]: project, ...userData.boards } });
+            openBoardHandler(res.message);
+            setSelected(res.message);
             setProject("")
         } catch (error) {
             console.log("error");
         }
     }
-    const openBoardHandler = async (projectname) => {
+    const openBoardHandler = async (boardId) => {
+        setSelected(boardId);
         setLoading(true);
-        const boardData = await getBoard(projectname);
+        const boardData = await getBoard(boardId);
         setBoard(boardData);
         setLoading(false);
     }
@@ -88,13 +81,11 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
     return (
 
         <>
-            <div>
-                <div className={` ${theme === 'light' ? 'shadow' : ''} dark:bg-[#21272d] color-red h-screen duration-200 p-5 pt-8 ${sideopen ? "w-72" : "w-20"} m-2 relative`} style={{ borderRadius: '0.6em' }}>
-
+            <div className='flex'>
+                <div className={`flex flex-col ${sideopen ? "px-6" : "px-0"} pt-3 space-y-8 bg-slate-100 dark:bg-[#21272d] color-red rounded-lg h-screen duration-200 border border-black dark:border-white ${sideopen ? "w-72" : "w-16"}`}>
                     {
-                        !sideopen ? <BsArrowRightShort className='text-4xl bg-black text-white 
-                    absolute rounded-full -right-3 top-9' onClick={clickRightArrow} /> : <BsArrowLeftShort className='text-4xl bg-black text-white 
-                    absolute rounded-full -right-3 top-9' onClick={clickLeftArrow} />
+                        !sideopen ? <div className='flex justify-center'><BsArrowRightShort className='text-4xl text-black dark:text-white' onClick={clickRightArrow} /></div> : <div className='flex justify-end'><BsArrowLeftShort className='text-4xl text-black dark:text-white'
+                            onClick={clickLeftArrow} /></div>
                     }
                     <Modal
                         open={open}
@@ -132,37 +123,67 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
 
                     {!sidebutton &&
                         <>
-                            <button className='text-lg font-semibold rounded-md' style={{
-                                color: theme === 'dark' ? 'white' : 'black',
-                                border: theme === 'dark' ? '3px solid white' : '3px solid black',
-                                width: "98%",
-                                height: "3rem",
-                                position: "relative",
-                                left: "-4px",
-                                marginTop: "8px"
-                            }} onClick={handleOpen} >
-                                <AddCircleRoundedIcon className={classes.addIcon} />
-                                Add Board
-                            </button>
-                            <p className='text-lg dark:text-white font-bold mt-4'>Your Boards</p>
-                            {
-                                userData && userData.boards.map((ele) => {
-                                    return <button key={ele} className='text-lg font-semibold rounded-md' style={{
-                                        color: theme === 'dark' ? 'white' : 'black',
-                                        border: theme === 'dark' ? '3px solid white' : '3px solid black',
-                                        width: "15rem",
-                                        height: "3rem",
-                                        position: "relative",
-                                        left: "-4px",
-                                        marginTop: "12px"
+                            <div className='flex flex-col space-y-6'>
+                                <button className='text-xl w-[15rem] h-12 font-semibold rounded-md' style={{
+                                    color: theme === 'dark' ? 'black' : 'white',
+                                    backgroundColor: theme === 'dark' ? 'white' : '#282C35'
+                                }} onClick={handleOpen} >
+                                    <div className='flex justify-center space-x-4'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                        <p className='tracking-wider mt-[2px]'>Add Board</p>
+                                    </div>
+                                </button>
+                                <p className='text-lg text-center dark:text-white font-semibold text-[#282C35]'>Your Boards</p>
+                                <hr />
+                                <div className='flex flex-col space-y-6'>
+                                    {
+                                        userData && Object.keys(userData.boards).map((ele) => {
+                                            return <button key={ele} className={`${(selected && selected === ele) ? "dark:bg-black bg-slate-200" : ""} text-lg dark:hover:bg-black font-medium rounded-md hover:bg-slate-200`} style={{
+                                                color: theme === 'dark' ? 'white' : 'black',
 
-                                    }} onClick={() => openBoardHandler(ele)} >
-                                        {ele}
-                                    </button>
-                                })
-                            }
+                                            }} onClick={() => openBoardHandler(ele)} >
+                                                <div className='flex space-x-4'>
+                                                    <div className='w-1/3 flex justify-center text-xl'>{(selected && selected === ele) ? <IconFilled theme={theme} /> : <IconOutlined theme={theme} />}</div>
+                                                    <div className='w-2/3 flex justify-start mt-[6px]'>{userData.boards[ele]}</div>
+                                                </div>
+                                            </button>
+                                        })
+                                    }
+                                </div>
+
+                            </div>
                         </>
 
+                    }
+                    {
+                        sidebutton &&
+                        <div className='space-y-4'>
+                            <div className='flex justify-center'>
+                                <Tooltip title="Add Board" placement='right'>
+                                    <button onClick={handleOpen} className='bg-black dark:bg-white dark:text-black text-white p-0.5 rounded-md'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </Tooltip>
+                            </div>
+                            <hr />
+                            <div className='flex flex-col space-y-8'>
+                                {
+                                    userData && Object.keys(userData.boards).map((ele) => {
+                                        return <Tooltip title={userData.boards[ele]} placement='right'>
+                                            <button key={ele} onClick={() => openBoardHandler(ele)} >
+                                                <div className='flex justify-center'>
+                                                    {(selected && selected === ele) ? <IconFilled theme={theme} /> : <IconOutlined theme={theme} />}
+                                                </div>
+                                            </button>
+                                        </Tooltip>
+                                    })
+                                }
+                            </div>
+                        </div>
                     }
                 </div>
 
@@ -171,5 +192,30 @@ function SideBar({ theme, userData, setUserData, setLoading, setBoard }) {
 
     )
 }
-
+function IconOutlined({ theme }) {
+    return (
+        <svg
+            fill={theme === 'dark' ? 'white' : 'black'}
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 -960 960 960"
+        >
+            <path d="M197.694-140.001q-23.596 0-40.645-17.048-17.048-17.049-17.048-40.645v-564.612q0-23.596 17.048-40.645 17.049-17.048 40.645-17.048h564.612q23.596 0 40.645 17.048 17.048 17.049 17.048 40.645v564.612q0 23.596-17.048 40.645-17.049 17.048-40.645 17.048H197.694zm219.614-45.384v-271.923H185.385v259.614q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h219.614zm45.384 0h299.614q5.385 0 8.847-3.462 3.462-3.462 3.462-8.847v-259.614H462.692v271.923zM185.385-502.692h589.23v-259.614q0-5.385-3.462-8.847-3.462-3.462-8.847-3.462H197.694q-5.385 0-8.847 3.462-3.462 3.462-3.462 8.847v259.614z"></path>
+        </svg>
+    );
+}
+function IconFilled({ theme }) {
+    return (
+        <svg
+            fill={theme === 'dark' ? 'white' : 'black'}
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 -960 960 960"
+        >
+            <path d="M197.694-140.001q-23.5 0-40.596-17.097-17.097-17.096-17.097-40.596v-269.614h277.307v327.307H197.694zm264.998 0v-327.307h357.307v269.614q0 23.5-17.097 40.596-17.096 17.097-40.596 17.097H462.692zM140.001-512.692v-249.614q0-23.5 17.097-40.596 17.096-17.097 40.596-17.097h564.612q23.5 0 40.596 17.097 17.097 17.096 17.097 40.596v249.614H140.001z"></path>
+        </svg>
+    );
+}
 export default SideBar

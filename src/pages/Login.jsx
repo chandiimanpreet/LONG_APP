@@ -1,10 +1,9 @@
 import React from 'react'
 import './login.css'
-import { signInWithPopup } from 'firebase/auth'
+import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../backend/firebase';
 import { loginUser } from '../backend/api/user';
 import { getBoard } from '../backend/api/board';
-
 
 function Login({ setUserData, setBoard, setPulseLoading }) {
     const signInUser = () => {
@@ -12,9 +11,10 @@ function Login({ setUserData, setBoard, setPulseLoading }) {
             .then(async () => {
                 const res = await loginUser();
                 setUserData(res);
-                if (res.boards.length > 0) {
+                if (Object.keys(res.boards).length > 0) {
+                    console.log("dfwff");
                     setPulseLoading(true)
-                    const board = await getBoard(res.boards[0]);
+                    const board = await getBoard(Object.keys(res.boards)[0]);
                     setBoard(board);
                     setPulseLoading(false)
                 }

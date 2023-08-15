@@ -6,6 +6,7 @@ export const getUser = () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                console.log(user);
                 const docRef = doc(db, "user", user.uid);
                 const userData = await getDoc(docRef);
                 resolve({ uid: user.uid, ...userData.data() });
@@ -22,7 +23,7 @@ export const loginUser = () => {
         if (userData.exists()) {
             resolve({ uid: auth.currentUser.uid, ...userData.data() });
         } else {
-            const data = { uid: auth.currentUser.uid, email: auth.currentUser.email, boards: [], name: "Gautam" };
+            const data = { uid: auth.currentUser.uid, email: auth.currentUser.email, boards: {}, name: auth.currentUser.displayName };
             await setDoc(docRef, data);
             resolve(data);
         }
@@ -30,7 +31,7 @@ export const loginUser = () => {
 }
 export const addMember = (data, boarData) => {
     return new Promise(async (resolve, reject) => {
-        const docRef = doc(db, "boards", boarData.boardName);
+        const docRef = doc(db, "boards", boarData.boardId);
         let newData;
         if (data.permission === "Owner") {
             newData = { ...boarData.owner, [data.email]:data.name }
