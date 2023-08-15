@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../backend/firebase'
 import { Box } from '@mui/system'
 function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
-    const [user] = useAuthState(auth);
     useEffect(() => {
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
@@ -25,7 +23,7 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
 
                     <div className="flex dark:bg-[#1d2125] items-center justify-center mr-10 ">
 
-                        <label for="toggleB" className="flex items-center dark:bg-[#1d2125] cursor-pointer">
+                        <label htmlFor="toggleB" className="flex items-center dark:bg-[#1d2125] cursor-pointer">
 
                             <div className="relative dark:bg-[#1d2125]">
                                 <input type="checkbox" onClick={handleThemeSwitch} id="toggleB" className="sr-only" />
@@ -41,8 +39,8 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
                     </div>
 
                     <img
-                        src={user?.photoURL.toString()}
-                        alt={user?.displayName.charAt(0).toUpperCase()}
+                        src={auth.currentUser?.photoURL.toString()}
+                        alt={auth.currentUser?.displayName.charAt(0).toUpperCase()}
                         className='rounded-full  cursor-pointer h-12 w-12'
                     />
                     <br />

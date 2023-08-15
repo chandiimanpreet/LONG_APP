@@ -12,13 +12,15 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [boardData, setBoard] = useState(null);
   const [pulseLoading, setPulseLoading] = useState(false);
+  const [selected, setSelected] = useState(null);
   const getUserData = async () => {
     try {
       const res = await getUser();
       setUserData(res);
-      if (res.boards.length > 0) {
+      if (Object.keys(res.boards).length > 0) {
         setPulseLoading(true)
-        const board = await getBoard(res.boards[0]);
+        const board = await getBoard(Object.keys(res.boards)[0]);
+        setSelected(Object.keys(res.boards)[0]);
         setBoard(board);
         setPulseLoading(false)
       }
@@ -38,7 +40,7 @@ function App() {
     return <Loading />;
   } else {
     return (
-      userData ? <Home pulseLoading={pulseLoading} setPulseLoading={setPulseLoading} userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData} /> : <Login setPulseLoading={setPulseLoading} setBoard={setBoard} setUserData={setUserData} />
+      userData ? <Home selected={selected} setSelected={setSelected} pulseLoading={pulseLoading} setPulseLoading={setPulseLoading} userData={userData} setUserData={setUserData} setBoard={setBoard} boardData={boardData} /> : <Login setPulseLoading={setPulseLoading} setBoard={setBoard} setUserData={setUserData} />
     )
   }
 }

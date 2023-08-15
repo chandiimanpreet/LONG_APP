@@ -28,6 +28,9 @@ function Layout({ theme, userData, boardData, setBoard }) {
     };
 
     const addNewMember = async () => {
+        if (boardData.owner[data.email] !== undefined || boardData.member[data.email] !== undefined) {
+            return;
+        }
         closeModal();
         const res = await addMember(data, boardData);
         setData({ name: '', email: '', permission: '' });
@@ -42,7 +45,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     const onDragEnd = async (re) => {
         if (!re.destination) return;
-        await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData.boardName, boardData);
+        await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData);
     };
 
     const style = {
@@ -117,19 +120,22 @@ function Layout({ theme, userData, boardData, setBoard }) {
         <div className="dark:bg-[#161a1d]">
 
             <Box sx={{ display: 'flex', }}>
-                <AvatarGroup total={Object.keys(boardData.owner).length + Object.keys(boardData.member).length} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
-                    {
-                        boardData && Object.keys(boardData.owner).map((owner) => {
-                            return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
-                        })
-                    }
-                    {
-                        boardData && Object.keys(boardData.member).map((member) => {
-                            return <Avatar key={member} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["member"][member])} />
-                        })
-                    }
-                </AvatarGroup>
-                <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold' }} onClick={openModal} > <AddIcon /> Add member</Button>
+                {boardData && <>
+                    <AvatarGroup total={boardData ? Object.keys(boardData.owner).length + Object.keys(boardData.member).length : 0} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
+                        {
+                            boardData && Object.keys(boardData.owner).map((owner) => {
+                                return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
+                            })
+                        }
+                        {
+                            boardData && Object.keys(boardData.member).map((member) => {
+                                return <Avatar key={member} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["member"][member])} />
+                            })
+                        }
+                    </AvatarGroup>
+
+                    <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold' }} onClick={openModal} > <AddIcon /> Add member</Button>
+                </>}
             </Box>
 
             {
@@ -137,7 +143,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                     <DragDropContext onDragEnd={onDragEnd}                    >
                         <Box width='100%' className=" blend flex">
                             {
-                                boardData.ticketsEntity && boardData.ticketsEntity.map((board, bIndex) => {
+                                boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
                                         <Fragment>
                                             <SubLayout theme={theme} setBoard={setBoard} boardData={boardData} key={bIndex} board={board} bIndex={bIndex} />
@@ -145,9 +151,11 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                     );
                                 })
                             }
-                            <Box sx={{ marginTop: '2rem' }}>
-                                <AddIcon sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
-                            </Box>
+                            {
+                                boardData && <Box sx={{ marginTop: '2rem' }}>
+                                    <AddIcon sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
+                                </Box>
+                            }
                         </Box>
                     </DragDropContext>
                 )
@@ -184,7 +192,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             <TextField name='name' type='text' required id="outlined-controlled" label="Name" value={data.name}
                                 onChange={dataHandler} sx={textFieldStyle}
                             />
-                            <TextField name='email' type='email' required id="outlined-controlled" label="Email" value={data.email}
+                            <TextField error={data.email !== "" && (boardData.owner[data.email] !== undefined || boardData.member[data.email] !== undefined)} helperText={data.email !== "" && (boardData.owner[data.email] !== undefined || boardData.member[data.email] !== undefined) ? "Email already exists" : ""} name='email' type='email' required id="outlined-controlled" label="Email" value={data.email}
                                 onChange={dataHandler} sx={textFieldStyle}
                             />
                             <FormControl sx={textFieldStyle} fullWidth>

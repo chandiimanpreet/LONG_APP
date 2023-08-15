@@ -5,7 +5,7 @@ import { Avatar, } from '@mui/material';
 import MyModal from './MyModal';
 import { Typography } from '@mui/material';
 
-function SingleItem({ data, index, theme ,boardData}) {
+function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
 
     const [open, setOpen] = useState(false);
     const openModal = () => { setOpen(true); }
@@ -40,26 +40,26 @@ function SingleItem({ data, index, theme ,boardData}) {
 
     return (
         <Fragment>
-            <Draggable  index={index} draggableId={data[0].toString()}>
+            <Draggable index={index} draggableId={data[0].toString()}>
                 {(provided) => (
-                   
-                        <div onClick={openModal} ref={provided.innerRef} {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'} w-55 px-5 pt-5 pb-5 m-3`}
-                        >
-                            <Typography className='text-3 line-clamp-3 bg-red blend'>{data[1]}</Typography>
-                            <div className="flex justify-between items-center mt-2">
-                                <p>EG-{data[0]}</p>
-                                <Avatar sx={{ width: '2rem !important', height: '2rem !important' }} {...stringAvatar(data[2])} />
-                            </div>
+
+                    <div onClick={openModal} ref={provided.innerRef} {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'} w-55 px-5 pt-5 pb-5 m-3`}
+                    >
+                        <Typography className='text-3 line-clamp-3 bg-red blend'>{data[1]}</Typography>
+                        <div className="flex justify-between items-center mt-2">
+                            <p>EG-{data[0]}</p>
+                            <Avatar sx={{ width: '2rem !important', height: '2rem !important' }} {...stringAvatar(data[2])} />
                         </div>
+                    </div>
 
                 )}
             </Draggable>
 
             {
                 open && (
-                    <MyModal boardData={boardData} theme={theme} open={open} id={data[0]} openModal={openModal} closeModal={closeModal} />
+                    <MyModal setBoard={setBoard} boardData={boardData} ticketPosition={{ bIndex, index }} theme={theme} open={open} id={data[0]} openModal={openModal} closeModal={closeModal} />
                 )
             }
 

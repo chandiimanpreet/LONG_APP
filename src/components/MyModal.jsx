@@ -4,8 +4,8 @@ import {
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ModalPulse } from './Pulse'
-import { getTicket } from '../backend/api/tickets';
-const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal }) => {
+import { editTicket, getTicket } from '../backend/api/tickets';
+const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal, ticketPosition, setBoard }) => {
     const [loading, setLoading] = useState(id !== 0 ? true : false);
     const [ticketInfo, setTicketInfo] = useState(null);
     const [modalData, setmodalData] = useState({
@@ -78,10 +78,18 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
         };
     }
     const getTicketData = async () => {
-        const res = await getTicket(id, boardData.boardName);
+        const res = await getTicket(id, boardData.boardId);
         setmodalData({ title: res.title, assignee: res.assignee, priority: res.priority, description: res.description, reporter: res.reporter });
-        setTicketInfo({ createdAt: res.createdAt, createdBy: res.createdBy });
+        setTicketInfo({ ...res });
         setLoading(false);
+    }
+    const editTicketData = async () => {
+        if (modalData.assignee !== ticketInfo.assignee || modalData.description !== ticketInfo.description || modalData.priority !== ticketInfo.priority
+            || modalData.reporter !== ticketInfo.reporter || modalData.title !== ticketInfo.title) {
+            const res = await editTicket(id, ticketPosition.bIndex, ticketPosition.index, boardData, modalData);
+            setBoard({ ...boardData, ticketsEntity: res });
+        }
+        closeModal();
     }
     useEffect(() => {
         if (loading) {
@@ -95,14 +103,18 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
             <Fade in={open}>
                 <Box component='form' onSubmit={(e) => {
                     e.preventDefault();
-                    getModalDataFromModal(modalData);
-                    closeModal();
+                    if (id !== 0) {
+                        editTicketData();
+                    } else {
+                        getModalDataFromModal(modalData);
+                        closeModal();
+                    }
                 }} sx={style}>
                     {loading ?
                         <ModalPulse /> : <>
                             {id > 0 &&
-                                <Box sx={{ display: 'flex',marginBottom:'1rem'}}>
-                                    <Typography sx={{display:'inline-flex'}}><Avatar {...stringAvatar((boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy]))} />{(boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy])}</Typography>
+                                <Box sx={{ display: 'flex', marginBottom: '1rem' }}>
+                                    <Typography sx={{ display: 'inline-flex' }}><Avatar {...stringAvatar((boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy]))} />{(boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy])}</Typography>
                                     <Typography ml={2}>EG-{id}</Typography>
                                 </Box>
                             }
