@@ -62,10 +62,10 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
         try {
             const res = await addBoard({ name: project }, userData);
             handleClose();
-            setUserData({ ...userData, boards: { [res.message]: project, ...userData.boards } });
+            setUserData({ ...userData, boards: { [res.message]: project, ...userData.boards } });//pehele joo board tha usme add kardo
             openBoardHandler(res.message);
             setSelected(res.message);
-            setProject("")
+            setProject("")//jab create ho geya hoo then khali kar doo
         } catch (error) {
             console.log("error");
         }
