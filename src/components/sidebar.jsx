@@ -4,7 +4,7 @@ import "./components.css"
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs"
 import { TextField, Box, Button, Typography, Modal, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useStyles } from "./style";
+
 import { addBoard, getBoard } from '../backend/api/board';
 
 function SideBar({ selected, setSelected, theme, userData, setUserData, setLoading, setBoard }) {
@@ -77,7 +77,7 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
         setBoard(boardData);
         setLoading(false);
     }
-    const classes = useStyles();
+   
     return (
 
         <>
