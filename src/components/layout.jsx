@@ -7,9 +7,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 import { addMember } from '../backend/api/user';
-
+import { addNewCol } from '../backend/api/board';
 function Layout({ theme, userData, boardData, setBoard }) {
-
     const [ready, setReady] = useState(false);
     const [newColumn, setNewColumn] = useState(false);
     const [columnName, setColumnName] = useState('');
@@ -48,6 +47,14 @@ function Layout({ theme, userData, boardData, setBoard }) {
         await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData);
     };
 
+    const handleNewCol = async (e) => {
+        e.preventDefault();
+         await addNewCol (columnName, boardData.ticketsEntity, boardData.boardId);
+        setNewColumn(false)
+        setBoard({
+            ...boardData, ticketsEntity: [...boardData.ticketsEntity, { [columnName]: [] }    
+        ]})
+    }
     const style = {
         position: 'absolute',
         top: '40%',
@@ -146,7 +153,8 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                 boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
                                         <Fragment>
-                                            <SubLayout theme={theme} setBoard={setBoard} boardData={boardData} key={bIndex} board={board} bIndex={bIndex} />
+                                            <SubLayout theme={theme} setBoard={setBoard} boardData={boardData}
+                                            key={bIndex} board={board} bIndex={bIndex} />
                                         </Fragment>
                                     );
                                 })
@@ -162,11 +170,13 @@ function Layout({ theme, userData, boardData, setBoard }) {
             }
 
             {/*Add new column Modal*/}
-            <Modal open={newColumn} onClose={() => { setNewColumn(false) }} closeAfterTransition
+            {newColumn &&
+                <Modal open={newColumn} onClose={() => { setNewColumn(false) }} closeAfterTransition
                 slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
-            >
-                <Fade in={newColumn}>
-                    <Box component='form' onSubmit={(e) => { e.preventDefault(); }} sx={style}>
+                >
+                    <Box>
+                    <Fade in={newColumn}>
+                    <Box component='form' onSubmit={handleNewCol} sx={style}>
                         <Typography variant="h4" component="h2" mb={2}>Add new column</Typography>
                         <TextField required fullWidth name='columnName' type='text' label="Column Name" value={columnName}
                             onChange={(e) => { setColumnName(e.target.value) }} sx={textFieldStyle}
@@ -174,11 +184,13 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
                             <Button type='button' onClick={() => { setNewColumn(false) }} variant='outlined' color='error'>Cancel</Button>
-                            <Button type='submit' variant='outlined' color='success'>Add</Button>
+                                    <Button type='submit' variant='outlined' color='success'>Add</Button>
                         </Box>
                     </Box>
                 </Fade>
-            </Modal>
+                </Box>
+
+            </Modal>} 
 
             {/*Add members Modal*/}
             <Modal

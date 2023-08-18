@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";// its provided the login usesr data
 import { auth } from "../firebase";
 import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore'
 const db = getFirestore();
@@ -6,9 +6,8 @@ export const getUser = () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                console.log(user);
                 const docRef = doc(db, "user", user.uid);
-                const userData = await getDoc(docRef);
+                const userData = await getDoc(docRef);//user data fetch all docRef
                 resolve({ uid: user.uid, ...userData.data() });
             } else {
                 reject({ message: "User not exist" });
@@ -24,7 +23,7 @@ export const loginUser = () => {
             resolve({ uid: auth.currentUser.uid, ...userData.data() });
         } else {
             const data = { uid: auth.currentUser.uid, email: auth.currentUser.email, boards: {}, name: auth.currentUser.displayName };
-            await setDoc(docRef, data);
+            await setDoc(docRef, data);//khud see uid set karne ke liye setDoc
             resolve(data);
         }
     })
@@ -34,10 +33,10 @@ export const addMember = (data, boarData) => {
         const docRef = doc(db, "boards", boarData.boardId);
         let newData;
         if (data.permission === "Owner") {
-            newData = { ...boarData.owner, [data.email]:data.name }
+            newData = { ...boarData.owner, [data.email]: data.name }
             await setDoc(docRef, {
                 "owner": newData
-            }, { merge: true });
+            }, { merge: true });//update // woo sab rehene doo basss this field update
             resolve({ ...boarData, owner: newData });
         } else {
             newData = { ...boarData.member, [data.email]: data.name }

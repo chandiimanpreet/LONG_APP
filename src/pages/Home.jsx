@@ -9,8 +9,6 @@ function Home({selected,setSelected ,userData, setUserData, setBoard, boardData,
 
     const [theme, setTheme] = useState('light');
 
-    console.log(boardData);
-
     return (
         <div className='dark:bg-[#161a1d]'>
             <hr />

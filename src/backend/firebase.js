@@ -14,10 +14,10 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);//initialized firebase
+const db = getFirestore(app); //initialized  cloud firestore and get the referance to the service
 
-const auth = getAuth();
+const auth = getAuth(); //
 const provider = new GoogleAuthProvider();
 
 // create a layout
@@ -26,7 +26,7 @@ export const createSubLayout = (data) => {
     setDoc(docRef, data);
 }
 //create a ticket for a layout 
-export const createTicket = (data) => { 
+export const createTicket = (data) => {
     const docRef = doc(db, "tickets", data.id);
     setDoc(docRef, data);
 }
