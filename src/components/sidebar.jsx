@@ -4,7 +4,6 @@ import "./components.css"
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs"
 import { TextField, Box, Button, Typography, Modal, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
 import { addBoard, getBoard } from '../backend/api/board';
 
 function SideBar({ selected, setSelected, theme, userData, setUserData, setLoading, setBoard }) {
@@ -82,7 +81,7 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
 
         <>
             <div className='flex'>
-                <div className={`flex flex-col ${sideopen ? "px-6" : "px-0"} pt-3 space-y-8 bg-slate-100 dark:bg-[#21272d] color-red rounded-lg h-screen duration-200 border border-black dark:border-white ${sideopen ? "w-72" : "w-16"}`}>
+                <div className={`flex flex-col ${sideopen ? "px-2" : "px-0"} pt-3 space-y-8 bg-slate-100 dark:bg-[#21272d] color-red rounded-lg min-h-screen duration-200 border border-black dark:border-white ${sideopen ? "w-56" : "w-16"}`}>
                     {
                         !sideopen ? <div className='flex justify-center'><BsArrowRightShort className='text-4xl text-black dark:text-white' onClick={clickRightArrow} /></div> : <div className='flex justify-end'><BsArrowLeftShort className='text-4xl text-black dark:text-white'
                             onClick={clickLeftArrow} /></div>
@@ -124,7 +123,7 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
                     {!sidebutton &&
                         <>
                             <div className='flex flex-col space-y-6'>
-                                <button className='text-xl w-[15rem] h-12 font-semibold rounded-md' style={{
+                                <button className='text-xl w-[13rem] h-12 font-semibold rounded-md' style={{
                                     color: theme === 'dark' ? 'black' : 'white',
                                     backgroundColor: theme === 'dark' ? 'white' : '#282C35'
                                 }} onClick={handleOpen} >

@@ -124,9 +124,9 @@ function Layout({ theme, userData, boardData, setBoard }) {
     }
 
     return (
-        <div className="dark:bg-[#161a1d]">
+        <div className="dark:bg-[#161a1d]" >
 
-            <Box sx={{ display: 'flex', }}>
+            <Box sx={{ display: 'flex'}}>
                 {boardData && <>
                     <AvatarGroup total={boardData ? Object.keys(boardData.owner).length + Object.keys(boardData.member).length : 0} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
                         {
@@ -148,7 +148,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
             {
                 ready && (
                     <DragDropContext onDragEnd={onDragEnd}                    >
-                        <Box width='100%' className=" blend flex">
+                        <Box className="flex space-x-4 ml-6 mb-12">
                             {
                                 boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
@@ -161,7 +161,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             }
                             {
                                 boardData && <Box sx={{ marginTop: '2rem' }}>
-                                    <AddIcon sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
+                                    <AddIcon className='dark:text-white text-black' sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
                                 </Box>
                             }
                         </Box>
