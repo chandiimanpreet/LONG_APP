@@ -2,13 +2,16 @@ import SubLayout from './subLayout'
 import React, { useEffect, useState, Fragment } from 'react'
 import { DragDropContext } from '@hello-pangea/dnd';
 import {
-    Backdrop, Button, Modal, Fade, Typography, Avatar, AvatarGroup, Select, TextField, InputLabel, FormControl, Box, MenuItem
+    Backdrop, Button, Modal, Fade, Typography, Avatar, AvatarGroup, Select, TextField, InputLabel,
+    FormControl, Box, MenuItem,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 import { addMember } from '../backend/api/user';
 import { addNewCol } from '../backend/api/board';
+
 function Layout({ theme, userData, boardData, setBoard }) {
+
     const [ready, setReady] = useState(false);
     const [newColumn, setNewColumn] = useState(false);
     const [columnName, setColumnName] = useState('');
@@ -49,11 +52,12 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     const handleNewCol = async (e) => {
         e.preventDefault();
-         await addNewCol (columnName, boardData.ticketsEntity, boardData.boardId);
+        await addNewCol(columnName, boardData.ticketsEntity, boardData.boardId);
         setNewColumn(false)
         setBoard({
-            ...boardData, ticketsEntity: [...boardData.ticketsEntity, { [columnName]: [] }    
-        ]})
+            ...boardData, ticketsEntity: [...boardData.ticketsEntity, { [columnName]: [] }
+            ]
+        })
     }
     const style = {
         position: 'absolute',
@@ -125,7 +129,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     return (
         <div className="dark:bg-[#161a1d]">
-            <Box sx={{ display: 'flex', }}>
+            <Box sx={{ display: 'flex'}}>
                 {
                     boardData && (
                         <Fragment>
@@ -141,7 +145,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                     })
                                 }
                             </AvatarGroup>
-                            <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', textTransform: 'capitalize' }}
+                            <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', }}
                                 onClick={openModal} > <AddIcon /> Add member</Button>
                         </Fragment>
                     )
@@ -150,20 +154,19 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
             {
                 ready && (
-                    <DragDropContext onDragEnd={onDragEnd}                    >
+                    <DragDropContext onDragEnd={onDragEnd}>
                         <Box className="flex space-x-4 ml-6 mb-12">
                             {
                                 boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
-                                        <Fragment>
-                                            <SubLayout theme={theme} setBoard={setBoard} boardData={boardData}
+                                        <SubLayout theme={theme} setBoard={setBoard} boardData={boardData}
                                             key={bIndex} board={board} bIndex={bIndex} />
-                                        </Fragment>
+
                                     );
                                 })
                             }
                             {
-                                boardData && <Box sx={{ marginTop: '2rem' }}>
+                                boardData && <Box >
                                     <AddIcon className='dark:text-white text-black' sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
                                 </Box>
                             }
@@ -175,25 +178,25 @@ function Layout({ theme, userData, boardData, setBoard }) {
             {/*Add new column Modal*/}
             {newColumn &&
                 <Modal open={newColumn} onClose={() => { setNewColumn(false) }} closeAfterTransition
-                slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
+                    slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
                 >
                     <Box>
-                    <Fade in={newColumn}>
-                    <Box component='form' onSubmit={handleNewCol} sx={style}>
-                        <Typography variant="h4" component="h2" mb={2}>Add new column</Typography>
-                        <TextField required fullWidth name='columnName' type='text' label="Column Name" value={columnName}
-                            onChange={(e) => { setColumnName(e.target.value) }} sx={textFieldStyle}
-                        />
+                        <Fade in={newColumn}>
+                            <Box component='form' onSubmit={handleNewCol} sx={style}>
+                                <Typography variant="h4" component="h2" mb={2}>Add new column</Typography>
+                                <TextField required fullWidth name='columnName' type='text' label="Column Name" value={columnName}
+                                    onChange={(e) => { setColumnName(e.target.value) }} sx={textFieldStyle}
+                                />
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
-                            <Button type='button' onClick={() => { setNewColumn(false) }} variant='outlined' color='error'>Cancel</Button>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '2rem' }}>
+                                    <Button type='button' onClick={() => { setNewColumn(false) }} variant='outlined' color='error'>Cancel</Button>
                                     <Button type='submit' variant='outlined' color='success'>Add</Button>
-                        </Box>
+                                </Box>
+                            </Box>
+                        </Fade>
                     </Box>
-                </Fade>
-                </Box>
 
-            </Modal>} 
+                </Modal>}
 
             {/*Add members Modal*/}
             <Modal

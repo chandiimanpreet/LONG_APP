@@ -43,15 +43,4 @@ export const addNewCol = (colName, ticketsEntity, boardName) => {
         }, { merge: true });
         resolve("sucess");
     })
-}
-
-export const addNewCol = (colName, ticketsEntity, boardName) => {
-    return new Promise(async (resolve, reject) => {
-        const docRef = doc(db, "boards", boardName);//referance of the document
-        const newCol = { [colName]: [] } //col name er vitorer jinis chai taii [colname eivabe likhte hoy]
-        await setDoc(docRef, {
-            ticketsEntity: arrayUnion(newCol)
-        }, { merge: true });
-        resolve("sucess");
-    })
-}
+};

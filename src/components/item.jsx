@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import "./components.css"
 import { Draggable } from '@hello-pangea/dnd';
-import { Avatar, Box, Menu, Typography, MenuItem } from '@mui/material';
+import { Avatar, Box, Menu,  MenuItem } from '@mui/material';
 import MyModal from './MyModal';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -36,9 +36,9 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
         return {
             sx: {
                 bgcolor: stringToColor(name),
-                width:24,
-                height:24,
-                fontSize:'small'
+                width: 24,
+                height: 24,
+                fontSize: 'small'
             },
             children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length > 1 ? name.split(' ')[1][0].toUpperCase() : ''}`,
         };
@@ -51,11 +51,14 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
         setAnchorEl(e.currentTarget);
         console.log(e)
     };
-    const handleClose =async () => {
+    const handleClose = async () => {
         setAnchorEl(null);
-        const newData= await deleteTicket(data[0], bIndex, index, boardData);
-        setBoard({...newData});
     };
+    const deleteTicketData = async () => {
+        const newData = await deleteTicket(data[0], bIndex, index, boardData);
+        setBoard({ ...newData });
+        handleClose();
+    }
 
     return (
         <Fragment>
@@ -64,35 +67,35 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
 
                     <div ref={provided.innerRef} {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'} px-5 pt-2 pb-1 m-3`}
+                        className={`bg-indigo-100 dark:bg-zinc-900 rounded-md p-2 flex flex-col space-y-4 border border-black shadow-lg`}
                     >
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', }}>
-                            <Typography className='text-3 line-clamp-3 bg-red blend pt-3'>{data[1]}</Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', }} className="">
+                            <p className='text-md tracking-wide line-clamp-3 p-1 rounded-md w-full dark:hover:bg-[#21272d] hover:bg-indigo-200' style={{ overflowWrap: 'anywhere' }}>{data[1]}</p>
                             <div>
                                 <IconButton aria-label="more" id="long-button"
                                     aria-controls={open ? 'long-menu' : undefined}
                                     aria-expanded={open ? 'true' : undefined} aria-haspopup="true"
                                     className={`dark:text-white`}
-                                    sx={{ padding: '5px 0px 0px 0px', }}
+                                    sx={{ padding: '5px 0px 0px 0px', }} onClick={handleClick}
                                 >
-                                    <MoreHorizIcon onClick={handleClick} />
+                                    <MoreHorizIcon />
                                 </IconButton>
                                 <Menu id="long-menu"
                                     MenuListProps={{ 'aria-labelledby': 'long-button', }}
-                                    anchorEl={anchorEl} open={openMenu} onClose={handleClose}
+                                    anchorEl={anchorEl} open={openMenu} onClick={handleClose}
                                     slotProps={{ paper: { style: { maxHeight: 48 * 4.5, width: '20ch', }, } }}
                                 >
                                     {options.map((option, idx) => (
-                                        <MenuItem key={option} onClick={handleClose}>
+                                        <MenuItem key={option} onClick={deleteTicketData}>
                                             {option}
                                         </MenuItem>
                                     ))}
                                 </Menu>
                             </div>
                         </Box>
-                        <div className="flex justify-between items-center pt-5" onClick={openModal}>
-                            <p>EG-{data[0]}</p>
-                            <Avatar sx={{ width: '2rem !important', height: '2rem !important' }} {...stringAvatar(data[2])} />
+                        <div className="flex justify-between items-center pt-2" onClick={openModal}>
+                            <p className='text-sm'>EG-{data[0]}</p>
+                            <Avatar {...stringAvatar(data[2])} />
                         </div>
                     </div>
 
