@@ -5,7 +5,6 @@ import SingleItem from './item'
 import { Droppable } from '@hello-pangea/dnd'
 import { BsPlus } from 'react-icons/bs'
 import { addTicket } from '../backend/api/tickets';
-import { Box } from '@mui/material';
 
 const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
 
@@ -25,23 +24,19 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
     }
 
     return (
-        <Box width='15rem'  key={Object.keys(board)[0]} style={{ backgroundColor: ' #161A1D #F4F5F7' }}
-            className={`flex flex-col h-full pb-2 py-2 px-2 m-2 rounded-lg `}
-        >
+        <div className='w-72 bg-slate-200 dark:bg-[#21272d] rounded-md shadow-lg'>
             <Droppable droppableId={bIndex.toString()}>
                 {(provided, snapshot) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className={`dark:text-white rounded-md blend h-full`}
+                        className={`dark:text-white rounded-md blend h-full  relative`}
                     >
-                        <h1 className={`text-3 px-2 font-bold py-5 text-center uppercase`}>
-                            {Object.keys(board)[0]}
-                        </h1>
-                        {/* <DotsVerticalIcon className="w-5 h-5 text-gray-500" /> */}
+                        <div className={`sticky text-center uppercase font-semibold h-12 top-0`}>
+                            <p className='mt-3'>{Object.keys(board)[0]}</p>
+                        </div>
 
-                        <div className={` overflow-y-auto ${theme === 'light' ? 'shadow' : 'shadow-dark'}  overflow-x-hidden h-auto`}
-                            style={{ maxHeight: 'calc(100vh - 290px)' }}>
+                        <div style={{overflowY:'auto',height:'64vh'}} className={`example flex flex-col space-y-2 mx-1.5 mb-6`}>
                             {board[Object.keys(board)[0]].length > 0 &&
                                 board[Object.keys(board)[0]].map((ticket, iIndex) => {
                                     const ticketData = ticket.split("-#$%-")
@@ -50,15 +45,12 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                                     );
                                 })}
                             {provided.placeholder}
-                        </div>
-
-                        <div className="flex justify-center">
-                            <button className="flex  my-3 space-x-2 text-lg relative" >
-                                <BsPlus id={Object.keys(board)[0]} onClick={(e) => {
-                                    setSelectedBoard({ columnIndex: bIndex, columnName: Object.keys(board)[0] });
-                                    openModal();
-                                }}
-                                    className="text-4xl absolute bg-black relative text-white rounded-full" />
+                            <button onClick={(e) => {
+                                setSelectedBoard({ columnIndex: bIndex, columnName: Object.keys(board)[0] });
+                                openModal();
+                            }} className="flex p-1.5 rounded-md hover:bg-slate-300 dark:hover:bg-zinc-900" >
+                                <BsPlus id={Object.keys(board)[0]}
+                                    className="text-3xl dark:text-white text-black rounded-md" /><p className='text-sm mt-1'>Add Ticket</p>
                             </button>
                         </div>
 
@@ -71,7 +63,8 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                     </div>
                 )}
             </Droppable>
-        </Box>
+        </div>
+
     )
 }
 
