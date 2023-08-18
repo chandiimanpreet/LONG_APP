@@ -124,25 +124,28 @@ function Layout({ theme, userData, boardData, setBoard }) {
     }
 
     return (
-        <div className="dark:bg-[#161a1d]" >
-
-            <Box sx={{ display: 'flex'}}>
-                {boardData && <>
-                    <AvatarGroup total={boardData ? Object.keys(boardData.owner).length + Object.keys(boardData.member).length : 0} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
-                        {
-                            boardData && Object.keys(boardData.owner).map((owner) => {
-                                return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
-                            })
-                        }
-                        {
-                            boardData && Object.keys(boardData.member).map((member) => {
-                                return <Avatar key={member} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["member"][member])} />
-                            })
-                        }
-                    </AvatarGroup>
-
-                    <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold' }} onClick={openModal} > <AddIcon /> Add member</Button>
-                </>}
+        <div className="dark:bg-[#161a1d]">
+            <Box sx={{ display: 'flex', }}>
+                {
+                    boardData && (
+                        <Fragment>
+                            <AvatarGroup total={boardData ? Object.keys(boardData.owner).length + Object.keys(boardData.member).length : 0} sx={{ marginTop: '2rem', marginLeft: '2rem' }}>
+                                {
+                                    boardData && Object.keys(boardData.owner).map((owner) => {
+                                        return <Avatar key={owner} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["owner"][owner])} />
+                                    })
+                                }
+                                {
+                                    boardData && Object.keys(boardData.member).map((member) => {
+                                        return <Avatar key={member} sx={{ width: '5px !important', height: '5px !important' }} {...stringAvatar(boardData["member"][member])} />
+                                    })
+                                }
+                            </AvatarGroup>
+                            <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', textTransform: 'capitalize' }}
+                                onClick={openModal} > <AddIcon /> Add member</Button>
+                        </Fragment>
+                    )
+                }
             </Box>
 
             {

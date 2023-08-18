@@ -5,7 +5,9 @@ import {
 import ClearIcon from '@mui/icons-material/Clear';
 import { ModalPulse } from './Pulse'
 import { editTicket, getTicket } from '../backend/api/tickets';
+
 const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal, ticketPosition, setBoard }) => {
+
     const [loading, setLoading] = useState(id !== 0 ? true : false);
     const [ticketInfo, setTicketInfo] = useState(null);
     const [modalData, setmodalData] = useState({
@@ -32,6 +34,7 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
         color: theme === 'dark' ? 'white' : 'black',
         background: theme === 'dark' ? 'linear-gradient(145deg, #282E33, #282E33)' : 'linear-gradient(145deg, #c1c1c1, #e5e5e5)',
     };
+
     const textFieldStyle = {
         color: theme === 'dark' ? 'white' : 'black', // Text color
         '& .MuiInputLabel-root': {
@@ -48,13 +51,12 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
         },
     };
 
-
     const stringToColor = (string) => {
         let hash = 0;
         let i;
 
         /* eslint-disable no-bitwise */
-        for (i = 0; i < string.length; i += 1) {
+        for (i = 0; i < string.length && string.length > 0; i += 1) {
             hash = string.charCodeAt(i) + ((hash << 5) - hash);
         }
 
@@ -64,10 +66,8 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
             const value = (hash >> (i * 8)) & 0xff;
             color += `00${value.toString(16)}`.slice(-2);
         }
-        /* eslint-enable no-bitwise */
-
         return color;
-    }
+    };
 
     const stringAvatar = (name) => {
         return {
@@ -76,13 +76,15 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
             },
             children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ').length > 1 ? name.split(' ')[1][0].toUpperCase() : ''}`,
         };
-    }
+    };
+
     const getTicketData = async () => {
         const res = await getTicket(id, boardData.boardId);
         setmodalData({ title: res.title, assignee: res.assignee, priority: res.priority, description: res.description, reporter: res.reporter });
         setTicketInfo({ ...res });
         setLoading(false);
-    }
+    };
+
     const editTicketData = async () => {
         if (modalData.assignee !== ticketInfo.assignee || modalData.description !== ticketInfo.description || modalData.priority !== ticketInfo.priority
             || modalData.reporter !== ticketInfo.reporter || modalData.title !== ticketInfo.title) {
@@ -90,12 +92,18 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
             setBoard({ ...boardData, ticketsEntity: res });
         }
         closeModal();
-    }
+    };
+
     useEffect(() => {
         if (loading) {
             getTicketData();
         }
-    }, [loading])
+    }, [loading]);
+
+    useEffect(() => {
+            console.log(boardData)
+    }, [boardData]);
+
     return (
         <Modal open={open} onClose={closeModal} closeAfterTransition
             slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
@@ -114,7 +122,13 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
                         <ModalPulse /> : <>
                             {id > 0 &&
                                 <Box sx={{ display: 'flex', marginBottom: '1rem' }}>
-                                    <Typography sx={{ display: 'inline-flex' }}><Avatar {...stringAvatar((boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy]))} />{(boardData.owner[ticketInfo.createdBy] === undefined ? boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy])}</Typography>
+                                    <Typography sx={{ display: 'inline-flex' }}>
+                                        <Avatar {...stringAvatar((boardData.owner[ticketInfo.createdBy] === undefined ?
+                                            boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy]))} />
+                                        {
+                                            (boardData.owner[ticketInfo.createdBy] === undefined ?
+                                                boardData.member[ticketInfo.createdBy] : boardData.owner[ticketInfo.createdBy])}
+                                    </Typography>
                                     <Typography ml={2}>EG-{id}</Typography>
                                 </Box>
                             }
@@ -127,21 +141,21 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
                                 <ClearIcon onClick={closeModal} sx={{ cursor: 'pointer' }} />
                             </Box>
 
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Box sx={{ marginTop: '1rem' }}>
-                                <Typography>Description</Typography>
-                                <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
-                                    rows={3} placeholder="Add a description" name='description'
-                                    value={modalData.description}
-                                    onChange={dataHandler} />
-                            </Box>
-                            <Box sx={{ marginTop: '2rem', }}>
-                                <Typography>Created  </Typography>
-                                <br />
-                                <Typography>Updated </Typography>
-                            </Box>
-                        </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Box sx={{ marginTop: '1rem' }}>
+                                        <Typography>Description</Typography>
+                                        <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
+                                            rows={3} placeholder="Add a description" name='description'
+                                            value={modalData.description}
+                                            onChange={dataHandler} />
+                                    </Box>
+                                    <Box sx={{ marginTop: '2rem', }}>
+                                        <Typography>Created  </Typography>
+                                        <br />
+                                        <Typography>Updated </Typography>
+                                    </Box>
+                                </Box>
 
                                 <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                                     <Box sx={{ display: 'flex', marginBottom: '15px' }}>
@@ -181,10 +195,10 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
                                                             </MenuItem>
                                                         ))
                                                     }
-                                                </Select >
-                                            </FormControl >
-                                        </Box >
-                                    </Box >
+                                                </Select>
+                                            </FormControl>
+                                        </Box>
+                                    </Box>
                                     <Box sx={{ display: 'flex', }}>
                                         <Typography sx={{ margin: '1rem 4rem' }} >Reporter</Typography>
                                         <Box sx={{ minWidth: '15rem' }}>
@@ -212,11 +226,10 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
                                                             </MenuItem>
                                                         ))
                                                     }
-                                                </Select >
-                                            </FormControl >
-
-                                        </Box >
-                                    </Box >
+                                                </Select>
+                                            </FormControl>
+                                        </Box>
+                                    </Box>
 
                                     <Box sx={{ display: 'flex', gap: '3rem', justifyContent: 'flex-end', marginTop: '2rem' }}>
                                         <Button type='button' onClick={closeModal} variant='contained' color='error'>Cancel</Button>

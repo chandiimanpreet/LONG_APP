@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useState } from 'react'
 import "./components.css"
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs"
@@ -12,10 +12,12 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
 
     const [sideopen, setSideOpen] = useState(true);
     const [project, setProject] = useState("");
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [sidebutton, setSideButton] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    // const classes = useStyles();
 
     const style = {
         position: 'absolute',
@@ -79,7 +81,7 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
    
     return (
 
-        <>
+        <Fragment>
             <div className='flex'>
                 <div className={`flex flex-col ${sideopen ? "px-2" : "px-0"} pt-3 space-y-8 bg-slate-100 dark:bg-[#21272d] color-red rounded-lg min-h-screen duration-200 border border-black dark:border-white ${sideopen ? "w-56" : "w-16"}`}>
                     {
@@ -119,9 +121,8 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
                         </Box>
                     </Modal>
 
-
-                    {!sidebutton &&
-                        <>
+                    {
+                        !sidebutton && (
                             <div className='flex flex-col space-y-6'>
                                 <button className='text-xl w-[13rem] h-12 font-semibold rounded-md' style={{
                                     color: theme === 'dark' ? 'black' : 'white',
@@ -151,11 +152,10 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
                                         })
                                     }
                                 </div>
-
                             </div>
-                        </>
-
+                        )
                     }
+                    
                     {
                         sidebutton &&
                         <div className='space-y-4'>
@@ -185,12 +185,12 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
                         </div>
                     }
                 </div>
-
-            </div >
-        </>
+            </div>
+        </Fragment>
 
     )
-}
+};
+
 function IconOutlined({ theme }) {
     return (
         <svg
@@ -203,7 +203,8 @@ function IconOutlined({ theme }) {
             <path d="M197.694-140.001q-23.596 0-40.645-17.048-17.048-17.049-17.048-40.645v-564.612q0-23.596 17.048-40.645 17.049-17.048 40.645-17.048h564.612q23.596 0 40.645 17.048 17.048 17.049 17.048 40.645v564.612q0 23.596-17.048 40.645-17.049 17.048-40.645 17.048H197.694zm219.614-45.384v-271.923H185.385v259.614q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h219.614zm45.384 0h299.614q5.385 0 8.847-3.462 3.462-3.462 3.462-8.847v-259.614H462.692v271.923zM185.385-502.692h589.23v-259.614q0-5.385-3.462-8.847-3.462-3.462-8.847-3.462H197.694q-5.385 0-8.847 3.462-3.462 3.462-3.462 8.847v259.614z"></path>
         </svg>
     );
-}
+};
+
 function IconFilled({ theme }) {
     return (
         <svg
@@ -216,5 +217,6 @@ function IconFilled({ theme }) {
             <path d="M197.694-140.001q-23.5 0-40.596-17.097-17.097-17.096-17.097-40.596v-269.614h277.307v327.307H197.694zm264.998 0v-327.307h357.307v269.614q0 23.5-17.097 40.596-17.096 17.097-40.596 17.097H462.692zM140.001-512.692v-249.614q0-23.5 17.097-40.596 17.096-17.097 40.596-17.097h564.612q23.5 0 40.596 17.097 17.097 17.096 17.097 40.596v249.614H140.001z"></path>
         </svg>
     );
-}
+};
+
 export default SideBar
