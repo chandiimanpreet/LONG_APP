@@ -1,6 +1,7 @@
-import { getFirestore, getDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { getFirestore, getDoc, doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { auth } from '../firebase'
 const db = getFirestore();
+
 export const addTicket = (data, columnIndex, columnName, boardData) => {
     return new Promise(async (resolve, reject) => {
         let docRef = doc(db, `boards/${boardData.boardId}/tickets`, boardData.nextId.toString());
@@ -16,8 +17,28 @@ export const addTicket = (data, columnIndex, columnName, boardData) => {
         }, { merge: true })
         resolve({ ...newBoardData });
     })
-}
-export const deleteTicket = (id) => {
+};
+
+export const deleteTicket = (ticketID, bIndex, index, boardData) => {
+
+    return new Promise(async (resolve, reject) => {
+        let docRef = doc(db, `boards/${boardData.boardId}/tickets`, ticketID);
+        await deleteDoc(docRef);
+
+        let updatedData = boardData.ticketsEntity[bIndex];
+        let columnName = Object.keys(updatedData)[0];
+        updatedData = updatedData[Object.keys(updatedData)[0]];
+
+        updatedData.splice(Number(index), 1);
+        boardData.ticketsEntity[bIndex] = { [columnName]: updatedData };
+
+        docRef = doc(db, `boards`, boardData.boardId);
+
+        await setDoc(docRef, {
+            ticketsEntity: boardData.ticketsEntity
+        }, { merge: true });
+        resolve(boardData);
+    })
 
 }
 
@@ -37,14 +58,16 @@ export const moveTicket = (sourceColumn, sourceIndex, destinationColumn, destina
         await setDoc(docRef, { status: Object.keys(boardData.ticketsEntity[Number(destinationColumn)])[0] }, { merge: true });
         resolve({ message: "success" })
     })
-}
+};
+
 export const getTicket = (id, boardId) => {
     return new Promise(async (resolve, reject) => {
         const docRef = doc(db, `boards/${boardId}/tickets`, id);
         const ticket = await getDoc(docRef);
         resolve(ticket.data());
     })
-}
+};
+
 export const editTicket = (id, columnIndex, rowIndex, boardData, data) => {
     return new Promise(async (resolve, reject) => {
         let docRef = doc(db, `boards/${boardData.boardId}/tickets`, id);
@@ -62,4 +85,4 @@ export const editTicket = (id, columnIndex, rowIndex, boardData, data) => {
         }, { merge: true });
         resolve(newBoardData);
     })
-}
+};

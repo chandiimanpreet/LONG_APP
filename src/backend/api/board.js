@@ -1,6 +1,7 @@
 import { getFirestore, getDoc, doc, setDoc, arrayUnion, collection } from 'firebase/firestore'
 import { auth } from '../firebase';//user ko access karne ke liye
 const db = getFirestore();
+
 export const addBoard = (data, userData) => {
     return new Promise(async (resolve, reject) => {
         const docRef = doc(collection(db, "boards"));
@@ -14,12 +15,22 @@ export const addBoard = (data, userData) => {
         }, { merge: true });
         resolve({ message: docRef.id });
     })
-}
+};
+
 export const getBoard = (boardId) => {
     return new Promise(async (resolve, reject) => {
         const docRef = doc(db, "boards", boardId);
         const boardData = await getDoc(docRef);
         resolve(boardData.data());
+    })
+};
+
+export const deleteBoard = (bIndex, boardData) => {
+    return new Promise(async (resolve, reject) => {
+        let docRef = doc(db, `boards/${boardData.boardId}/ticketsEntity`, bIndex);
+        console.log(docRef);
+        // boardData = await getDoc(docRef);
+        // resolve(boardData.data());
     })
 }
 
@@ -32,4 +43,4 @@ export const addNewCol = (colName, ticketsEntity, boardName) => {
         }, { merge: true });
         resolve("sucess");
     })
-}
+};
