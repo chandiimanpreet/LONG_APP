@@ -67,16 +67,16 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
 
                     <div ref={provided.innerRef} {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`bg-indigo-100 dark:bg-zinc-900 rounded-md p-2 flex flex-col space-y-4 border border-black shadow-lg`}
+                        className={` blend  ${theme === 'light' ? 'shadow' : 'shadow-dark'} w-55 px-5 pt-5 pb-5 m-3`}
                     >
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', }} className="">
-                            <p className='text-md tracking-wide line-clamp-3 p-1 rounded-md w-full dark:hover:bg-[#21272d] hover:bg-indigo-200' style={{ overflowWrap: 'anywhere' }}>{data[1]}</p>
+                            <p className='text-md tracking-wide line-clamp-3 rounded-md w-full dark:hover:bg-[#21272d] hover:bg-indigo-200' style={{ overflowWrap: 'anywhere' }}>{data[1]}</p>
                             <div>
                                 <IconButton aria-label="more" id="long-button"
                                     aria-controls={open ? 'long-menu' : undefined}
                                     aria-expanded={open ? 'true' : undefined} aria-haspopup="true"
                                     className={`dark:text-white`}
-                                    sx={{ padding: '5px 0px 0px 0px', }} onClick={handleClick}
+                                    sx={{ padding: '3px 0px 0px 0px', }} onClick={handleClick}
                                 >
                                     <MoreHorizIcon />
                                 </IconButton>

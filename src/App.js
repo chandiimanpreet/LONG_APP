@@ -4,10 +4,12 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Loading from './components/Loading';
 import { useEffect } from 'react';
-import { getUser } from './backend/api/user';
+import { addNewBoard, getUser } from './backend/api/user';
 import { getBoard } from './backend/api/board';
+import { useSearchParams } from 'react-router-dom';
 
 function App() {
+  const [searchParams] = useSearchParams();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [boardData, setBoard] = useState(null);
@@ -16,7 +18,12 @@ function App() {
   const getUserData = async () => {
     try {
       const res = await getUser();
-      setUserData(res);
+      if (searchParams.has("boardId") && searchParams.has("boardName") && res.boards[searchParams.get("boardId")] === undefined) {
+        const newBoards= await addNewBoard(searchParams.get("boardName"),searchParams.get("boardId"),res);
+        setUserData({...res,boards:newBoards});
+      }else{
+        setUserData(res);
+      }
       if (Object.keys(res.boards).length > 0) {
         setPulseLoading(true)
         const board = await getBoard(Object.keys(res.boards)[0]);
@@ -30,11 +37,10 @@ function App() {
     } finally {
       setLoading(false);
     }
-
   }
-
   useEffect(() => {
     getUserData()
+    // eslint-disable-next-line
   }, [])
   if (loading) {
     return <Loading />;

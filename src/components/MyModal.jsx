@@ -98,12 +98,8 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
         if (loading) {
             getTicketData();
         }
-    }, [loading]);
-
-    useEffect(() => {
-            console.log(boardData)
-    }, [boardData]);
-
+        // eslint-disable-next-line
+    }, [loading])
     return (
         <Modal open={open} onClose={closeModal} closeAfterTransition
             slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 500, }, }}
