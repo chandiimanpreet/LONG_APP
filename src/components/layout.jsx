@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { moveTicket } from '../backend/api/tickets';
 import { addMember } from '../backend/api/user';
 import { addNewCol } from '../backend/api/board';
-
+import { getAuth, sendSignInLinkToEmail } from 'firebase/auth';
 function Layout({ theme, userData, boardData, setBoard }) {
 
     const [ready, setReady] = useState(false);
@@ -34,7 +34,9 @@ function Layout({ theme, userData, boardData, setBoard }) {
             return;
         }
         closeModal();
+        const auth=getAuth();
         const res = await addMember(data, boardData);
+        await sendSignInLinkToEmail(auth,data.email,{url:`https://long-nine.vercel.app?boardId=${boardData.boardId}&boardName=${boardData.boardName}`,handleCodeInApp: true})
         setData({ name: '', email: '', permission: '' });
         setBoard({ ...res });
     };
@@ -154,8 +156,8 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
             {
                 ready && (
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Box className="flex space-x-4 ml-6 mb-12">
+                    <DragDropContext onDragEnd={onDragEnd}                    >
+                        <Box width='100%' className=" blend flex">
                             {
                                 boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
@@ -167,7 +169,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             }
                             {
                                 boardData && <Box >
-                                    <AddIcon className='dark:text-white text-black' sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
+                                    <AddIcon className='dark:text-white text-black mt-12' sx={{ cursor: 'pointer' }} onClick={() => { setNewColumn(true) }} />
                                 </Box>
                             }
                         </Box>

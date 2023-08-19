@@ -47,3 +47,14 @@ export const addMember = (data, boarData) => {
         }
     })
 }
+export const addNewBoard=(boardName,boardId,userData)=>{
+    return new Promise(async (resolve ,reject)=>{
+        const docRef=doc(db,"user",userData.uid);
+        let newBoard=userData.boards;
+        newBoard[boardId]=boardName;
+        setDoc(docRef,{
+            boards:newBoard
+        },{merge:true})
+        resolve(newBoard)
+    })
+}
