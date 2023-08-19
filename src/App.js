@@ -22,7 +22,7 @@ function App() {
         const newBoards= await addNewBoard(searchParams.get("boardName"),searchParams.get("boardId"),res);
         setUserData({...res,boards:newBoards});
       }else{
-        setUserData(res);
+        // setUserData(res);
       }
       if (Object.keys(res.boards).length > 0) {
         setPulseLoading(true)
