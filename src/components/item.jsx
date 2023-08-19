@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import "./components.css"
 import { Draggable } from '@hello-pangea/dnd';
-import { Avatar, Box, Menu,  MenuItem } from '@mui/material';
+import { Avatar, Box, Menu, MenuItem } from '@mui/material';
 import MyModal from './MyModal';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -47,13 +47,10 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl);
-    const handleClick = (e) => {
-        setAnchorEl(e.currentTarget);
-        console.log(e)
-    };
-    const handleClose = async () => {
-        setAnchorEl(null);
-    };
+
+    const handleClick = (e) => { setAnchorEl(e.currentTarget); };
+    const handleClose = async () => { setAnchorEl(null); };
+    
     const deleteTicketData = async () => {
         const newData = await deleteTicket(data[0], bIndex, index, boardData);
         setBoard({ ...newData });

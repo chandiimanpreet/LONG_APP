@@ -18,7 +18,6 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
         priority: 0,
     });
 
-    console.log(ticketInfo);
     const dataHandler = (e) => {
         setmodalData({ ...modalData, [e.target.name]: e.target.value })
     };
