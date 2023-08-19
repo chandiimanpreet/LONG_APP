@@ -13,8 +13,15 @@ import { deleteBoard } from '../backend/api/board';
 
 const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
 
+    const options = ['Delete'];
+
+    // States
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openMenu = Boolean(anchorEl);
+
+    // Handlers
 
     const openModal = () => { setOpen(true); }
     const closeModal = () => { setOpen(false); }
@@ -24,20 +31,15 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
         setBoard(newData);
     };
 
-    const options = ['Delete'];
+    const handleClick = (e) => { setAnchorEl(e.currentTarget); };
+    const handleClose = async () => { setAnchorEl(null); }
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const openMenu = Boolean(anchorEl);
-    const handleClick = (e) => {
-        setAnchorEl(e.currentTarget);
-        console.log(e)
-    };
-    const handleClose = async () => {
-        setAnchorEl(null);
+    const handleDelete = async () => {
         const newBoard = await deleteBoard(bIndex, boardData);
         setBoard({ ...newBoard });
-    };
 
+        handleClose();
+    };
 
     return (
         <Box width='15rem' style={{ backgroundColor: ' #161A1D #F4F5F7' }}
@@ -51,7 +53,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                         className={`dark:text-white rounded-md blend h-full  relative`}
                     >
                         <div className='flex justify-between'>
-                            <h1 className={`text-3 px-2 font-bold py-5 text-center uppercase`}>
+                            <h1 className={`text-3 pl-2 font-bold py-5 text-center uppercase`}>
                                 {Object.keys(board)[0]}
                             </h1>
                             <h1 className={`text-md font-normal pt-[20px]`}>
@@ -61,7 +63,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                                 <IconButton aria-label="more" id="long-button"
                                     aria-controls={open ? 'long-menu' : undefined}
                                     aria-expanded={open ? 'true' : undefined} aria-haspopup="true"
-                                    className={`dark:text-white`}
+                                    className={`dark:text-white`} onClick={handleClick}
                                 >
                                     <MoreHorizIcon />
                                 </IconButton>
@@ -71,7 +73,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                                     slotProps={{ paper: { style: { maxHeight: 48 * 4.5, width: '20ch', }, } }}
                                 >
                                     {options.map((option) => (
-                                        <MenuItem key={option} onClick={handleClose}>
+                                        <MenuItem key={option} onClick={handleDelete}>
                                             {option}
                                         </MenuItem>
                                     ))}
