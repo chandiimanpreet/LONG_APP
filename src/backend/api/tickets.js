@@ -10,7 +10,7 @@ export const addTicket = (data, columnIndex, columnName, boardData) => {
         });
         docRef = doc(db, "boards", boardData.boardId);
         let newBoardData = { ...boardData, nextId: boardData.nextId + 1 }
-        newBoardData.ticketsEntity[columnIndex] = { [columnName]: [...boardData.ticketsEntity[columnIndex][columnName], boardData.nextId + "-#$%-" + data.title + "-#$%-" + (boardData.owner[data.assignee] === undefined ? boardData.member[data.assignee] : boardData.owner[data.assignee])] };
+        newBoardData.ticketsEntity[columnIndex] = { [columnName]: [...boardData.ticketsEntity[columnIndex][columnName], boardData.nextId + "-#$%-" + data.title + "-#$%-" + data.assignee] };
         await setDoc(docRef, {
             ticketsEntity: boardData.ticketsEntity,
             nextId: boardData.nextId + 1

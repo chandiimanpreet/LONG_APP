@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { auth } from '../backend/firebase'
 import { Box } from '@mui/system'
+import { Tooltip } from '@mui/material';
 function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
     useEffect(() => {
         if (theme === 'dark') {
@@ -37,12 +38,13 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
                         </label>
 
                     </div>
-
-                    <img
-                        src={auth.currentUser?.photoURL.toString()}
-                        alt={auth.currentUser?.displayName.charAt(0).toUpperCase()}
-                        className='rounded-full  cursor-pointer h-12 w-12'
-                    />
+                    <Tooltip placement='bottom-end' title={auth.currentUser.email}>
+                        <img
+                            src={auth.currentUser?.photoURL.toString()}
+                            alt={auth.currentUser?.displayName.charAt(0).toUpperCase()}
+                            className='rounded-full  cursor-pointer h-12 w-12'
+                        />
+                    </Tooltip>
                     <br />
                     <div className="flex items-center">
                         <button onClick={() => { auth.signOut(); setUserData(null); setBoard(null); }} className='logout-btn dark:text-white flex items-center'>
