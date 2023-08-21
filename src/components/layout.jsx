@@ -34,9 +34,9 @@ function Layout({ theme, userData, boardData, setBoard }) {
             return;
         }
         closeModal();
-        const auth=getAuth();
+        const auth = getAuth();
         const res = await addMember(data, boardData);
-        await sendSignInLinkToEmail(auth,data.email,{url:`https://long-nine.vercel.app?boardId=${boardData.boardId}&boardName=${boardData.boardName}`,handleCodeInApp: true})
+        await sendSignInLinkToEmail(auth, data.email, { url: `https://long-nine.vercel.app?boardId=${boardData.boardId}&boardName=${boardData.boardName}`, handleCodeInApp: true })
         setData({ name: '', email: '', permission: '' });
         setBoard({ ...res });
     };
@@ -49,6 +49,9 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     const onDragEnd = async (re) => {
         if (!re.destination) return;
+        if (boardData.member[userData.email] !== undefined && Object.values(boardData.ticketsEntity[Number(re.source.droppableId)])[0][Number(re.source.index)].split("-#$%-")[2] !== userData.email) {
+            return;
+        }
         await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData);
     };
 
@@ -131,7 +134,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
 
     return (
         <div className="dark:bg-[#161a1d]">
-            <Box sx={{ display: 'flex'}}>
+            <Box sx={{ display: 'flex' }}>
                 {
                     boardData && (
                         <Fragment>
@@ -147,8 +150,11 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                     })
                                 }
                             </AvatarGroup>
-                            <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', }}
-                                onClick={openModal} > <AddIcon /> Add member</Button>
+                            {
+                                boardData.member[userData.email]===undefined &&
+                                <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', }}
+                                    onClick={openModal} > <AddIcon /> Add member</Button>
+                            }
                         </Fragment>
                     )
                 }

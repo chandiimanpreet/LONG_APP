@@ -92,7 +92,7 @@ function SingleItem({ bIndex, data, index, theme, boardData, setBoard }) {
                         </Box>
                         <div className="flex justify-between items-center pt-2" onClick={openModal}>
                             <p className='text-sm'>EG-{data[0]}</p>
-                            <Avatar {...stringAvatar(data[2])} />
+                            <Avatar {...stringAvatar(boardData.owner[data[2]]===undefined?boardData.member[data[2]]:boardData.owner[data[2]])} />
                         </div>
                     </div>
 
