@@ -144,9 +144,9 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
                                                 color: theme === 'dark' ? 'white' : 'black',
 
                                             }} onClick={() => openBoardHandler(ele)} >
-                                                <div className='flex space-x-4'>
+                                                <div className='flex items-center'>
                                                     <div className='w-1/3 flex justify-center text-xl'>{(selected && selected === ele) ? <IconFilled theme={theme} /> : <IconOutlined theme={theme} />}</div>
-                                                    <div className='w-2/3 flex justify-start mt-[6px]'>{userData.boards[ele]}</div>
+                                                    <div className='w-2/3 flex justify-start'>{userData.boards[ele]}</div>
                                                 </div>
                                             </button>
                                         })
