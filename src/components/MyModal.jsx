@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Backdrop, Box, Modal, Fade, Typography, Avatar, Select, TextField, InputLabel, MenuItem, FormControl, Button
 } from '@mui/material';
+import Datepicker from "tailwind-datepicker-react"
 import ClearIcon from '@mui/icons-material/Clear';
 import { ModalPulse } from './Pulse'
 import { editTicket, getTicket } from '../backend/api/tickets';
@@ -21,6 +22,40 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
     const dataHandler = (e) => {
         setmodalData({ ...modalData, [e.target.name]: e.target.value })
     };
+
+    const options = {
+        title: "Select due date",
+        autoHide: true,
+        todayBtn: false,
+        clearBtn: true,
+        maxDate: new Date("2030-01-01"),
+        minDate: new Date("1950-01-01"),
+        theme: {
+            background: "#a1a1aa dark:bg-gray-800",
+            todayBtn: "",
+            clearBtn: "",
+            icons: "",
+            text: "",
+            input: "",
+            inputIcon: "",
+            selected: "",
+        },
+        icons: {
+            // () => ReactElement | JSX.Element
+            prev: () => <span>Previous</span>,
+            next: () => <span>Next</span>,
+        },
+        datepickerClassNames: "top-12",
+        language: "en",
+    }
+
+    const [show, setShow] = useState(false)
+    const handleChange = (selectedDate) => {
+        console.log(selectedDate)
+    }
+    const handleClose = (state) => {
+        setShow(state)
+    }
 
     const style = {
         position: 'absolute',
@@ -138,18 +173,26 @@ const MyModal = ({ boardData, open, id, theme, closeModal, getModalDataFromModal
 
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Box sx={{ marginTop: '1rem' }}>
+                                    <Box sx={{ marginTop: '1rem', marginBottom: '2rem' }}>
                                         <Typography>Description</Typography>
                                         <TextField sx={textFieldStyle} className="border-gray-300 rounded focus:ring-purple-400 w-96 "
                                             rows={3} placeholder="Add a description" name='description'
                                             value={modalData.description}
                                             onChange={dataHandler} />
                                     </Box>
-                                    <Box sx={{ marginTop: '2rem', }}>
-                                        <Typography>Created  </Typography>
-                                        <br />
-                                        <Typography>Updated </Typography>
-                                    </Box>
+                                    {id !== 0 && (
+                                        <div sx={{ marginTop: '2rem' }}>
+                                            <Typography>Created</Typography>
+                                            <br />
+                                            <Typography>Updated</Typography>
+                                        </div>
+                                    )}
+                                    {id === 0 && (
+                                        <div className={`flex gap-10 items-center`}>
+                                            <span className={`whitespace-nowrap`}>Due Date</span>
+                                            <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose} />
+                                        </div>
+                                    )}
                                 </Box>
 
                                 <Box sx={{ display: 'flex', flexDirection: 'column', }}>

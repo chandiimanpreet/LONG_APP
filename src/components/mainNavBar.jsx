@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
-import { auth } from '../backend/firebase'
-import { Box } from '@mui/system'
-import { Tooltip } from '@mui/material';
+import React, { useEffect } from 'react';
+import { auth } from '../backend/firebase';
+
 function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
     useEffect(() => {
         if (theme === 'dark') {
@@ -16,11 +15,11 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
     };
 
     return (
-        <Box className='justify-between '>
-            <header className='flex  justify-between dark:bg-[#1d2125] p-5 shadow-lg sticky top-0  z-10 '>
+        <div className='justify-between'>
+            <header className='flex justify-between dark:bg-[#1d2125] p-5 shadow-lg sticky top-0 z-10 '>
                 <h1 className='text-4xl bg-back dark:text-white dark:bg-[#1d2125] font-bold '>Long app</h1>
 
-                <div className='flex justify-between  dark:bg-[#1d2125]'>
+                <div className='flex justify-between dark:bg-[#1d2125]'>
 
                     <div className="flex dark:bg-[#1d2125] items-center justify-center mr-10 ">
 
@@ -38,13 +37,16 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
                         </label>
 
                     </div>
-                    <Tooltip placement='bottom-end' title={auth.currentUser.email}>
+                    <div className="relative group">
                         <img
                             src={auth.currentUser?.photoURL.toString()}
                             alt={auth.currentUser?.displayName.charAt(0).toUpperCase()}
-                            className='rounded-full  cursor-pointer h-12 w-12'
+                            className='rounded-full cursor-pointer h-12 w-12'
                         />
-                    </Tooltip>
+                        <div className="hidden group-hover:block bg-gray-800 text-white text-xs rounded p-1 absolute">
+                            {auth.currentUser.email}
+                        </div>
+                    </div>
                     <br />
                     <div className="flex items-center">
                         <button onClick={() => { auth.signOut(); setUserData(null); setBoard(null); }} className='logout-btn dark:text-white flex items-center'>
@@ -57,7 +59,7 @@ function MainNavBar({ setUserData, theme, setTheme, setBoard }) {
 
                 </div>
             </header>
-        </Box>
+        </div>
     );
 }
 

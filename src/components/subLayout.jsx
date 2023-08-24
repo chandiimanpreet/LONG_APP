@@ -3,9 +3,8 @@ import "./components.css"
 import MyModal from './MyModal';
 import SingleItem from './item'
 import { Droppable } from '@hello-pangea/dnd'
-import { BsPlus } from 'react-icons/bs'
 import { addTicket } from '../backend/api/tickets';
-import { Box, Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { deleteBoard } from '../backend/api/board';
@@ -42,7 +41,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
     };
 
     return (
-        <Box width='15rem' style={{ backgroundColor: ' #161A1D #F4F5F7' }}
+        <div width='15rem' style={{ width: '15rem', backgroundColor: ' #161A1D #F4F5F7' }}
             className={`flex flex-col h-full pb-2 py-2 px-2 m-2 rounded-lg `}
         >
             <Droppable droppableId={bIndex.toString()}>
@@ -95,9 +94,11 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                             <button onClick={(e) => {
                                 setSelectedBoard({ columnIndex: bIndex, columnName: Object.keys(board)[0] });
                                 openModal();
-                            }} className="flex p-1.5 rounded-md hover:bg-slate-300 dark:hover:bg-zinc-900" >
-                                <BsPlus id={Object.keys(board)[0]}
-                                    className="text-3xl dark:text-white text-black rounded-md" /><p className='text-sm mt-1'>Add Ticket</p>
+                            }} className="flex p-1.5 w-full items-center rounded-md hover:bg-slate-300 dark:hover:bg-zinc-900" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p className='text-sm'>&nbsp; Add Ticket</p>
                             </button>
                         </div>
 
@@ -110,7 +111,7 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
                     </div>
                 )}
             </Droppable>
-        </Box>
+        </div>
 
     )
 }

@@ -10,5 +10,4 @@ export const useStyles = makeStyles({
         top: "13rem",
         width: "17rem"
     },
-
 });

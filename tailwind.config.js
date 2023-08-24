@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{jsx,js}"],
+  content: ["./src/**/*.{jsx,js}",
+    "./node_modules/tailwind-datepicker-react/dist/**/*.js",],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
