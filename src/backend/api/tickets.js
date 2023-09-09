@@ -1,6 +1,6 @@
-import { getFirestore, getDoc, doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
+import { getFirestore, getDoc, doc, setDoc, serverTimestamp, runTransaction } from 'firebase/firestore'
 import { auth } from '../firebase'
-const db = getFirestore();
+export const db = getFirestore();
 
 export const addTicket = (data, columnIndex, columnName, boardData) => {
     return new Promise(async (resolve, reject) => {
@@ -22,41 +22,66 @@ export const addTicket = (data, columnIndex, columnName, boardData) => {
 export const deleteTicket = (ticketID, bIndex, index, boardData) => {
 
     return new Promise(async (resolve, reject) => {
-        let docRef = doc(db, `boards/${boardData.boardId}/tickets`, ticketID);
-        await deleteDoc(docRef);
+        let ticketDocref = doc(db, `boards/${boardData.boardId}/tickets`, ticketID);
+        let boardDocref = doc(db, `boards`, boardData.boardId);
 
         let updatedData = boardData.ticketsEntity[bIndex];
         let columnName = Object.keys(updatedData)[0];
         updatedData = updatedData[Object.keys(updatedData)[0]];
-
         updatedData.splice(Number(index), 1);
         boardData.ticketsEntity[bIndex] = { [columnName]: updatedData };
-
-        docRef = doc(db, `boards`, boardData.boardId);
-
-        await setDoc(docRef, {
-            ticketsEntity: boardData.ticketsEntity
-        }, { merge: true });
-        resolve(boardData);
+        try {
+            await runTransaction(db, async (transaction) => {
+                const ticketDoc = await transaction.get(ticketDocref);
+                const boardDoc = await transaction.get(boardDocref);
+                if (!ticketDoc.exists() || !boardDoc.exists()) {
+                    throw new Error("Document doesn't exists");
+                }
+                transaction.delete(ticketDocref);
+                transaction.set(boardDocref, {
+                    ticketsEntity: boardData.ticketsEntity
+                }, { merge: true });
+                resolve(boardData);
+            })
+        }
+        catch (e) {
+            reject(e);
+        }
     })
 
 }
 
 export const moveTicket = (sourceColumn, sourceIndex, destinationColumn, destinationIndex, boardData) => {
     return new Promise(async (resolve, reject) => {
-        let docRef = doc(db, "boards", boardData.boardId);
+        let boardDocref = doc(db, "boards", boardData.boardId);
         let source = boardData.ticketsEntity[Number(sourceColumn)][Object.keys(boardData.ticketsEntity[Number(sourceColumn)])[0]];
         let destination = boardData.ticketsEntity[Number(destinationColumn)][Object.keys(boardData.ticketsEntity[Number(destinationColumn)])[0]];
         const moveData = source[sourceIndex];
+        let ticketDocref = doc(db, `boards/${boardData.boardId}/tickets`, moveData.split("-#$%-")[0]);
         source.splice(Number(sourceIndex), 1);
         destination.splice(Number(destinationIndex), 0, moveData);
-        boardData.ticketsEntity[sourceColumn] = { [Object.keys(boardData.ticketsEntity[Number(sourceColumn)])[0]]: source };
-        boardData.ticketsEntity[destinationColumn] = { [Object.keys(boardData.ticketsEntity[Number(destinationColumn)])[0]]: destination };
-        console.log(boardData);
-        await setDoc(docRef, { ticketsEntity: boardData.ticketsEntity }, { merge: true });
-        docRef = doc(db, `boards/${boardData.boardId}/tickets`, moveData.split("-#$%-")[0]);
-        await setDoc(docRef, { status: Object.keys(boardData.ticketsEntity[Number(destinationColumn)])[0] }, { merge: true });
-        resolve({ message: "success" })
+        let newBoardData = { ...boardData };
+        newBoardData.ticketsEntity[sourceColumn] = { [Object.keys(newBoardData.ticketsEntity[Number(sourceColumn)])[0]]: source };
+        newBoardData.ticketsEntity[destinationColumn] = { [Object.keys(newBoardData.ticketsEntity[Number(destinationColumn)])[0]]: destination };
+
+        try {
+            await runTransaction(db, async (transaction) => {
+                const boardDoc = await transaction.get(boardDocref);
+                const ticketDoc = await transaction.get(ticketDocref);
+                if (!ticketDoc.exists() || !boardDoc.exists()) {
+                    throw new Error("Document doesn't exist");
+                }
+                transaction.set(boardDocref, {
+                    ticketsEntity: newBoardData.ticketsEntity
+                }, { merge: true });
+                transaction.set(ticketDocref, {
+                    status: Object.keys(newBoardData.ticketsEntity[Number(destinationColumn)])[0]
+                }, { merge: true })
+            })
+            resolve(newBoardData);
+        } catch (e) {
+            reject(e);
+        }
     })
 };
 
@@ -70,19 +95,31 @@ export const getTicket = (id, boardId) => {
 
 export const editTicket = (id, columnIndex, rowIndex, boardData, data) => {
     return new Promise(async (resolve, reject) => {
-        let docRef = doc(db, `boards/${boardData.boardId}/tickets`, id);
-        await setDoc(docRef, {
-            ...data, updatedAt: serverTimestamp()
-        }, { merge: true });
-        docRef = doc(db, "boards", boardData.boardId);
+        let ticketDocref = doc(db, `boards/${boardData.boardId}/tickets`, id);
+        let boardDocref = doc(db, "boards", boardData.boardId);
         const columnName = Object.keys(boardData.ticketsEntity[columnIndex])[0];
         let newData = boardData.ticketsEntity[columnIndex][columnName];
-        newData[rowIndex] = id + "-#$%-" + data.title + "-#$%-" + (boardData.owner[data.assignee] === undefined ? boardData.member[data.assignee] : boardData.owner[data.assignee])
+        newData[rowIndex] = id + "-#$%-" + data.title + "-#$%-" + data.assignee
         let newBoardData = boardData.ticketsEntity;
         newBoardData[columnIndex] = { [columnName]: newData };
-        await setDoc(docRef, {
-            ticketsEntity: newBoardData
-        }, { merge: true });
-        resolve(newBoardData);
+        try {
+            await runTransaction(db, async (transaction) => {
+                const ticketDoc = await transaction.get(ticketDocref);
+                const boardDoc = await transaction.get(boardDocref);
+                if (!ticketDoc.exists() || !boardDoc.exists()) {
+                    throw new Error("Document doesn't exist");
+                }
+                transaction.set(ticketDocref, {
+                    ...data, updatedAt: serverTimestamp()
+                }, { merge: true });
+                transaction.set(boardDocref, {
+                    ticketsEntity: newBoardData
+                }, { merge: true })
+                resolve(newBoardData);
+            })
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
     })
 };

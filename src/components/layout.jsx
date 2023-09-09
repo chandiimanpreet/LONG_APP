@@ -46,13 +46,17 @@ function Layout({ theme, userData, boardData, setBoard }) {
             setReady(true);
         }
     }, []);
-
     const onDragEnd = async (re) => {
         if (!re.destination) return;
         if (boardData.member[userData.email] !== undefined && Object.values(boardData.ticketsEntity[Number(re.source.droppableId)])[0][Number(re.source.index)].split("-#$%-")[2] !== userData.email) {
             return;
         }
-        await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData);
+        try {
+            const res=await moveTicket(re.source.droppableId, re.source.index, re.destination.droppableId, re.destination.index, boardData);
+            setBoard(res)
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleNewCol = async (e) => {
@@ -151,7 +155,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                                 }
                             </AvatarGroup>
                             {
-                                boardData.member[userData.email]===undefined &&
+                                boardData.member[userData.email] === undefined &&
                                 <Button sx={{ margin: '2rem 2rem 2rem 0', fontWeight: 'bold', }}
                                     onClick={openModal} > <AddIcon /> Add member</Button>
                             }
@@ -167,7 +171,7 @@ function Layout({ theme, userData, boardData, setBoard }) {
                             {
                                 boardData && boardData.ticketsEntity.map((board, bIndex) => {
                                     return (
-                                        <SubLayout theme={theme} setBoard={setBoard} boardData={boardData}
+                                        <SubLayout theme={theme} userData={userData} setBoard={setBoard} boardData={boardData}
                                             key={bIndex} board={board} bIndex={bIndex} />
 
                                     );
