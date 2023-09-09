@@ -4,9 +4,9 @@ import "./components.css"
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs"
 import { TextField, Box, Button, Typography, Modal, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { addBoard, getBoard } from '../backend/api/board';
+import { addBoard } from '../backend/api/board';
 
-function SideBar({ selected, setSelected, theme, userData, setUserData, setLoading, setBoard }) {
+function SideBar({ selected, setSelected, theme, userData, setUserData, setLoading}) {
 
     // <div className={`${theme === 'light'? 'shadow': ''} dark:bg-[#21272d] h-screen duration-200 p-5 pt-8 ${open ? "w-72" : "w-20"} m-2 rounded-lg relative`}>
 
@@ -72,11 +72,8 @@ function SideBar({ selected, setSelected, theme, userData, setUserData, setLoadi
         }
     }
     const openBoardHandler = async (boardId) => {
-        setSelected(boardId);
         setLoading(true);
-        const boardData = await getBoard(boardId);
-        setBoard(boardData);
-        setLoading(false);
+        setSelected(boardId);
     }
    
     return (
