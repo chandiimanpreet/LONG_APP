@@ -14,7 +14,7 @@ function Home({selected,setSelected ,userData, setUserData, setBoard, boardData,
             <hr />
             <MainNavBar setUserData={setUserData} theme={theme} setTheme={setTheme} setBoard={setBoard} />
             <div className='flex'>
-                <SideBar selected={selected} setSelected={setSelected} setBoard={setBoard} setLoading={setPulseLoading} theme={theme} userData={userData} setUserData={setUserData} />
+                <SideBar selected={selected} setSelected={setSelected} setLoading={setPulseLoading} theme={theme} userData={userData} setUserData={setUserData} />
                 {pulseLoading ? <Pulse /> : <Layout setBoard={setBoard} theme={theme} userData={userData} setLoading={setPulseLoading} boardData={boardData} />}
 
             </div>

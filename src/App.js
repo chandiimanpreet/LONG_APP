@@ -5,8 +5,9 @@ import Login from './pages/Login';
 import Loading from './components/Loading';
 import { useEffect } from 'react';
 import { addNewBoard, getUser } from './backend/api/user';
-import { getBoard } from './backend/api/board';
 import { useSearchParams } from 'react-router-dom';
+import { onSnapshot,doc } from '@firebase/firestore';
+import { db } from './backend/api/tickets';
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -26,10 +27,7 @@ function App() {
       }
       if (Object.keys(res.boards).length > 0) {
         setPulseLoading(true)
-        const board = await getBoard(Object.keys(res.boards)[0]);
         setSelected(Object.keys(res.boards)[0]);
-        setBoard(board);
-        setPulseLoading(false)
       }
     }
     catch (error) {
@@ -38,6 +36,18 @@ function App() {
       setLoading(false);
     }
   }
+  useEffect(()=>{
+    let unsub=null;
+    if(selected){
+      unsub=onSnapshot(doc(db,"boards",selected),(doc)=>{
+        setBoard(doc.data());
+        setPulseLoading(false);
+      })
+    }
+    return ()=>{
+      if(unsub)unsub();
+    }
+  },[selected])
   useEffect(() => {
     getUserData()
     // eslint-disable-next-line
