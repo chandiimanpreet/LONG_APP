@@ -10,7 +10,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { deleteBoard } from '../backend/api/board';
 
 
-const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
+const SubLayout = ({ board, bIndex, theme, boardData, setBoard ,userData}) => {
 
     const options = ['Delete'];
 
@@ -31,9 +31,14 @@ const SubLayout = ({ board, bIndex, theme, boardData, setBoard }) => {
     };
 
     const handleClick = (e) => { setAnchorEl(e.currentTarget); };
-    const handleClose = async () => { setAnchorEl(null); }
+    const handleClose = () => { setAnchorEl(null); }
 
     const handleDelete = async () => {
+        if(boardData.member[userData.email]!==undefined){
+            setAnchorEl(null);
+            alert("You don't have permission to delete.")
+            return;
+        }
         const newBoard = await deleteBoard(bIndex, boardData);
         setBoard({ ...newBoard });
 
